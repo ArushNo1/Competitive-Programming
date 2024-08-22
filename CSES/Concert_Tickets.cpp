@@ -1,0 +1,110 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+using namespace std;
+
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> ii;
+typedef vector<ii> vii;
+typedef long long ll;
+typedef vector<ll> vll;
+typedef vector<vll> vvll;
+typedef long double ld;
+
+typedef tree<int,null_type,less<int>,rb_tree_tag,
+tree_order_statistics_node_update> indexed_set;
+
+
+#define endll "\n"
+
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+
+#define tr(c,i) for(__typeof__((c)).begin() i = (c).begin(); i != (c).end(); i++)
+#define present(c,x) ((c).find(x) != (c).end())
+
+#define cpresent(c,x) (find(all(c),x) != (c).end())
+
+#define sz(a) ll((a).size())
+#define MOD ll(1e9+7)
+#define INF ll(2e63-1)
+#define dbg(x) cout << __LINE__ << ": " << #x << "=" << x << endl;
+
+#include <iostream>
+
+
+void fillv(vi& v, int n) {
+    for (int i = 0; i < n; ++i) {
+        std::cin >> v[i];
+    }
+}
+
+inline void open(const char * fin, const char * fout)
+{
+    freopen(fin, "r", stdin);
+    freopen(fout, "w", stdout);
+}
+
+void solve()
+{
+
+}
+
+int binaryse(vi& arr, int start, int endpos, int target){
+    int mid;
+    int best = -1;
+    while(start <= endpos){
+        mid = (start + endpos) / 2;
+        int guess = arr[mid];
+        if(guess == target){
+            arr.erase(std::next(arr.begin(), mid),std::next(arr.begin(), mid) + 1);
+            return guess;
+        }else if(guess < target){
+            if(arr[best] < guess){
+                best = mid;
+            }
+            start = mid + 1;
+        }else{
+            endpos = mid - 1;
+        }
+        
+    }
+    if(best == -1) return -1;
+    int ret = arr[best];
+    arr.erase(std::next(arr.begin(), best),std::next(arr.begin(), best) + 1);
+    return ret;
+}
+
+int main()
+{
+    std::cin.tie(0); cout.tie(0);
+    ios::sync_with_stdio(false);
+    
+    //int T = 1; cin >> T; for(int t = 0; t < T; t++) solve();
+    int n, m;
+    std::cin >> n >> m;
+    //vi tickets(n);
+    multiset<int> tickets;
+    for(int i = 0; i < n; i++){
+        int x;
+        cin >> x;
+        tickets.insert(x);
+    }
+    for(int i = 0; i < m; i++){
+        //cout << binaryse(tickets, 0, n - 1 - i, people[i]) << endll;
+        int person;
+        cin >> person;
+        auto it = tickets.upper_bound(person);
+        if(it == tickets.begin()){
+            cout << -1 << "\n";
+        }
+        else{
+            cout << *(--it) << "\n";
+            tickets.erase(it);
+        }
+    }
+}

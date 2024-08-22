@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+...LeetCode.cpp
+*.prob
+/bin
+output.txt
+input.txt
+main.cpp
+math.txt
+main.bin
+debug.txt
