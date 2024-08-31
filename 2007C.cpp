@@ -17,7 +17,7 @@ typedef long double ld;
 typedef pair<ll, ll> pll;
 typedef vector<bool> vb;
 
-typedef tree<int,null_type,less<int>,rb_tree_tag,
+typedef tree<ll,null_type,less<ll>,rb_tree_tag,
 tree_order_statistics_node_update> indexed_set;
 
 
@@ -30,11 +30,27 @@ tree_order_statistics_node_update> indexed_set;
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endll;
 #define print(x) cout << __LINE__ << ": " << #x << "=" << x << endll;
 
+ll ind = -1;
 template <typename T>
-ostream& operator<< (ostream& os, const vector<T>& arr){
+ostream& operator<< (ostream& os, const set<T>& arr){
+    int i = 0;
 	os << "[";
     for(const T x : arr){
+        if(i == ind) os << ">";
 		os << x << " ";
+        ++i;
+	}
+	os << "]";
+    return os;
+}
+template <typename T>
+ostream& operator<< (ostream& os, const vector<T>& arr){
+    int i = 0;
+	os << "[";
+    for(const T x : arr){
+        if(i == ind) os << ">";
+		os << x << " ";
+        ++i;
 	}
 	os << "]";
     return os;
@@ -91,55 +107,58 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+ll comp(ll a, ll b){
+    if(abs(a) > abs(b)){
+        return b;
+    }
+    else{
+        return a;
+    }
+}
+
+ll range(set<ll>& s){
+    return *s.rbegin() - *s.begin();
+}
+
+ll nmod(ll a, ll b){
+    return -(-a % -b);
+}
 
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
+    ll n, a, b;
+    cin >> n >> a >> b;
+    ll g = gcd(a, b);
+    if(a > b){
+        swap(a, b);
+    }
+    set<ll> nums;
+    for(int i = 0; i < n; i++){
+        ll t;
+        cin >> t;
+        t %= g;
+        nums.insert(t);
+    }
+    a %= g;
+    b %= g;
+    dbg(a);
+    dbg(g);
+    dbg(b);
+    
+    
 
-    vvi adj(n + 1);
-    vi pred(n + 1);
-    for(int i = 0; i < m; i++){
-        int a, b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
+    vll arr(all(nums));
+    n = arr.size();
+    ll range = arr[n - 1] - arr[0];
+    dbg(range);
+    for(int i = 0; i < n; i++){
+        arr.push_back((arr[i] + b));
+        range = min(range, abs(arr.back() - arr[i + 1]));
+        
+        dbg(arr);
+        dbg(range);
     }
-
-
-    vb visited(n + 1, -1);
-    queue<int> q;
-    q.push(1);
-    pred[1] = 1;
-    visited[1] = true;
-    while(!q.empty()){
-        int node = q.front(); q.pop();
-        if(node == n + 1) break;
-        for(int nb : adj[node]){
-            if(!visited[nb]){
-                visited[nb] = true;
-                q.push(nb);
-                pred[nb] = node;
-            }
-        }
-    }
-    stack<int> res;
-    int cur = n;
-    while(cur != 1){
-        res.push(cur);
-        cur = pred[cur];
-        if(cur == -1){
-            cout << "IMPOSSIBLE" << endll;
-            return;
-        }
-    }
-    res.push(1);
-    cout << res.size() << endll;
-    while(!res.empty()){
-        cout << res.top() << " ";
-        res.pop();
-    }
-    cout << endll;
+    cout << range << endll;
 }
 
 int main()
@@ -148,7 +167,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    //cin >> T;
+    cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

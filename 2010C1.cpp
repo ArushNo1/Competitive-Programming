@@ -91,56 +91,88 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+class HashedString {
+
+  private:
+
+    // change M and B if you want
+
+    static const long long M = 1e9 + 9;
+
+    static const long long B = 9973;
+
+
+    // pow[i] contains B^i % M
+
+    static vector<long long> pow;
+
+
+    // p_hash[i] is the hash of the first i characters of the given string
+
+    vector<long long> p_hash;
+
+
+  public:
+
+    HashedString(const string &s) : p_hash(s.size() + 1) {
+
+        while (pow.size() <= s.size()) { pow.push_back((pow.back() * B) % M); }
+
+
+        p_hash[0] = 0;
+
+        for (int i = 0; i < s.size(); i++) {
+
+            p_hash[i + 1] = ((p_hash[i] * B) % M + s[i]) % M;
+
+        }
+
+    }
+
+
+    long long get_hash(int start, int end) {
+
+        long long raw_val =
+
+            (p_hash[end + 1] - (p_hash[start] * pow[end - start + 1]));
+
+        return (raw_val % M + M) % M;
+
+    }
+
+};
+
+vector<long long> HashedString::pow = {1};
 
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-
-    vvi adj(n + 1);
-    vi pred(n + 1);
-    for(int i = 0; i < m; i++){
-        int a, b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
+    string s;
+    cin >> s;
+    int n = s.length();
+    if(n == 1){
+        cout << "NO" << endll;
+        return;
     }
-
-
-    vb visited(n + 1, -1);
-    queue<int> q;
-    q.push(1);
-    pred[1] = 1;
-    visited[1] = true;
-    while(!q.empty()){
-        int node = q.front(); q.pop();
-        if(node == n + 1) break;
-        for(int nb : adj[node]){
-            if(!visited[nb]){
-                visited[nb] = true;
-                q.push(nb);
-                pred[nb] = node;
-            }
-        }
-    }
-    stack<int> res;
-    int cur = n;
-    while(cur != 1){
-        res.push(cur);
-        cur = pred[cur];
-        if(cur == -1){
-            cout << "IMPOSSIBLE" << endll;
+    HashedString hs(s);
+    //first x: 0-x, last x = n-x, n
+    //if n is even, n/2 is good so n/2 + 1
+    //if n is odd, n/2 n/2 + 1 
+    for(int x = n - 1; x >= 2 && x > n / 2; x--){
+        //dbg(x);
+        // dbg(s.substr(0, x));
+        // dbg(hs.get_hash(0, x - 1));
+        // dbg(s.substr(n - x, n - 1));
+        // dbg(hs.get_hash(n - x, n - 1));
+        if(hs.get_hash(0, x - 1) == hs.get_hash(n - x, n - 1)){
+            cout << "YES" << endll;
+            cout << s.substr(0, x) << endll;
             return;
         }
     }
-    res.push(1);
-    cout << res.size() << endll;
-    while(!res.empty()){
-        cout << res.top() << " ";
-        res.pop();
-    }
-    cout << endll;
+    cout << "NO" << endll;
 }
+
+
 
 int main()
 {

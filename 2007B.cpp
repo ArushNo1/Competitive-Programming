@@ -31,7 +31,7 @@ tree_order_statistics_node_update> indexed_set;
 #define print(x) cout << __LINE__ << ": " << #x << "=" << x << endll;
 
 template <typename T>
-ostream& operator<< (ostream& os, const vector<T>& arr){
+ostream& operator<< (ostream& os, const set<T, greater<T>>& arr){
 	os << "[";
     for(const T x : arr){
 		os << x << " ";
@@ -91,53 +91,34 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
-
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-
-    vvi adj(n + 1);
-    vi pred(n + 1);
-    for(int i = 0; i < m; i++){
-        int a, b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
+    int n, q;
+    cin >> n >> q;
+    set<ll, greater<int>> nums;
+    for(int i = 0; i < n; i++){
+        ll t;
+        cin >> t;
+        nums.insert(t);
     }
-
-
-    vb visited(n + 1, -1);
-    queue<int> q;
-    q.push(1);
-    pred[1] = 1;
-    visited[1] = true;
-    while(!q.empty()){
-        int node = q.front(); q.pop();
-        if(node == n + 1) break;
-        for(int nb : adj[node]){
-            if(!visited[nb]){
-                visited[nb] = true;
-                q.push(nb);
-                pred[nb] = node;
+    for(int i = 0; i < q; i++){
+        char c;
+        ll l, r;
+        cin >> c >> l >> r;
+        auto m = nums.begin();
+        ll M = *m;
+        
+        nums.erase(m);
+        if(M >= l && M <= r){
+            if(c == '+'){
+                M++;
+            }
+            else{
+                M--;
             }
         }
-    }
-    stack<int> res;
-    int cur = n;
-    while(cur != 1){
-        res.push(cur);
-        cur = pred[cur];
-        if(cur == -1){
-            cout << "IMPOSSIBLE" << endll;
-            return;
-        }
-    }
-    res.push(1);
-    cout << res.size() << endll;
-    while(!res.empty()){
-        cout << res.top() << " ";
-        res.pop();
+        nums.insert(M);
+        cout << M << " ";
     }
     cout << endll;
 }
@@ -148,7 +129,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    //cin >> T;
+    cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
