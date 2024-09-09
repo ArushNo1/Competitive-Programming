@@ -92,9 +92,26 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+int log3(int x){
+    if(x == 0) return 0;
+    int counter = 0;
+    while(x > 0){
+        x /= 3;
+        ++counter;
+    }
+    return counter;
+}
+
 void solve(int num_tc)
 {
-    
+    int l, r;
+    cin >> l >> r;
+    int sum = 0;
+    for(int i = 1; i <= r; i *= 3){
+        sum += r + 1 - max(l, i);
+    }
+
+    cout << sum + log3(l) << endll;
 }
 
 int main()
@@ -103,7 +120,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    //cin >> T;
+    cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
