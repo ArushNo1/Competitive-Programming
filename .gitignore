@@ -42,4 +42,5 @@ debug.txt
 AdventOfCode
 AdventOfCode.cpp
 main.java
-/ztemplatefiles
+.t/
+.vscode/
