@@ -95,6 +95,6 @@
         "cassert": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
-    "C_Cpp.default.compilerPath": "C:/Program Files/MSYS2/ucrt64/bin/gcc.exe"
-
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+    "git.path": "/usr/bin/git"
 }
