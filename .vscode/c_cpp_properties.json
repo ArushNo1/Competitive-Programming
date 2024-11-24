@@ -20,16 +20,25 @@
         },
         {
             "name": "WSL",
-            "compilerPath": "/usr/bin/g++",
             "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/g++",
             "includePath": [
+                "${workspaceFolder}/**",
                 "/usr/include",
-                "/usr/local/include",
-                "${workspaceFolder}/**"
+                "/usr/local/include"
             ],
             "defines": [],
             "cStandard": "c17",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "/usr/include",
+                    "/usr/local/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
         }
     ],
     "version": 4
