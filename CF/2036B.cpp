@@ -1,25 +1,15 @@
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-
-using namespace __gnu_pbds;
 using namespace std;
 
 typedef vector<int> vi;
 typedef vector<vi> vvi;
 typedef pair<int, int> ii;
-typedef vector<ii> vii;
 typedef long long ll;
-typedef vector<ll> vll;
-typedef vector<vll> vvll;
 typedef long double ld;
 typedef pair<ll, ll> pll;
 typedef vector<bool> vb;
-
-typedef tree<int,null_type,less<int>,rb_tree_tag,
-tree_order_statistics_node_update> indexed_set;
-
 
 #define endll '\n'
 
@@ -29,8 +19,6 @@ tree_order_statistics_node_update> indexed_set;
 #define INF ll(2e63-1)
 #define EPS ld(1e-9)
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endll;
-#define print(x) cout << __LINE__ << ": " << #x << "=" << x << endll;
-#define ans(x) cout << (x) << endll; return;
 
 template <typename T>
 ostream& operator<< (ostream& os, const vector<T>& arr){
@@ -92,23 +80,32 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
+// File 1: /t/Templates/Debugging/mapdbg.cpp
+
+template <typename T, typename U>
+ostream& operator<< (ostream& os, const map<T, U, greater<T>>& arr){
+	os << "{\n";
+    for(const pair<T,U>& x : arr){
+		os << "    " << x << endll;
+	}
+	os << "}";
+    return os;
+}
 
 void solve(int num_tc)
 {
     int n, k;
     cin >> n >> k;
-    map<int, int> money;
-    //<brand, gain>
+    vi costs(k + 1);
     for(int i = 0; i < k; i++){
         int b, c;
         cin >> b >> c;
-        money[b] += c;
+        costs[b] += c;
     }
-    auto it = money.begin();
+    sort(all(costs), greater<int>());
     ll total = 0;
-    for(int i = 0; i < n; i++){
-        total += it->second;
-        it++;
+    for(int i = 0; i < min<ll>(n, costs.size()); i++){
+        total += costs[i];
     }
     cout << total << endll;
 }

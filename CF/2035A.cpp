@@ -18,7 +18,7 @@ typedef vector<bool> vb;
 #define inf int(2e31-1)
 #define INF ll(2e63-1)
 #define EPS ld(1e-9)
-#define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endll;
+#define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
 
 template <typename T>
 ostream& operator<< (ostream& os, const vector<T>& arr){
@@ -83,20 +83,14 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vi notes(n);
-    fillv(notes, n);
-    int prev = notes[0];
-    for(int i = 1; i < n; i++){
-        int diff = abs(prev - notes[i]);
-        if(!(diff == 5 || diff == 7)){
-            cout << "NO" << endll;
-            return;
-        }
-        prev = notes[i];
-    }
-    cout << "YES" << endll;
+    ll n, m, r, c;
+    cin >> n >> m >> r >> c;
+    ll total = n * m;
+    ll pos = (r - 1) * m + c;
+    ll ans = total - pos;
+    ans += (n - r) * (m - 1);
+    cout << ans << endll;
+
 }
 
 int main()

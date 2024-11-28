@@ -83,20 +83,46 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vi notes(n);
-    fillv(notes, n);
-    int prev = notes[0];
-    for(int i = 1; i < n; i++){
-        int diff = abs(prev - notes[i]);
-        if(!(diff == 5 || diff == 7)){
-            cout << "NO" << endll;
-            return;
+    int n, m;
+    cin >> n >> m;
+    vector<vi> carpet(n, vi(m));
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            char c;
+            cin >> c;
+            carpet[i][j] = c - '0';
         }
-        prev = notes[i];
     }
-    cout << "YES" << endll;
+    int count = 0;
+    int top = 0, bot = n - 1, left = 0, right = m - 1;
+    while(top <= bot && left <= right){
+        vi layer;
+        for(int i = left; i <= right; i++){
+            layer.push_back(carpet[top][i]);
+        }
+        for(int i = top + 1; i <= bot; i++){
+            layer.push_back(carpet[i][right]);
+        }
+        for(int i = right - 1; i >= left; i--){
+            layer.push_back(carpet[bot][i]);
+        }
+        for(int i = bot - 1; i > top; i--){
+            layer.push_back(carpet[i][left]);
+        }
+        top++, bot--, left++, right--;
+        
+        layer.push_back(layer[0]);
+        layer.push_back(layer[1]);
+        layer.push_back(layer[2]);
+
+        for(int i = 0; i < layer.size() - 3; i++){
+            if(layer[i] == 1 && layer[i + 1] == 5 && layer[i + 2] == 4 && layer[i + 3] == 3){
+                count++;
+            }
+        }
+    }
+    cout << count << endll;
+   
 }
 
 int main()

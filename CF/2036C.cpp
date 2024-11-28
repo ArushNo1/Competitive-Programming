@@ -81,22 +81,84 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+// File 1: /t/Templates/Debugging/setdbg.cpp
+
+template <typename T>
+ostream& operator<< (ostream& os, const set<T>& arr){
+	os << "[";
+    for(const T x : arr){
+		os << x << " ";
+	}
+	os << "]";
+    return os;
+}
+
+template <typename T>
+ostream& operator<< (ostream& os, const multiset<T>& arr){
+    os << "[";
+    for(const T x : arr){
+        os << x << " ";
+    }
+    os << "]";
+    return os;
+}
+
+template <typename T>
+ostream& operator<< (ostream& os, const unordered_set<T>& arr){
+    os << "[";
+    for(const T x : arr){
+        os << x << " ";
+    }
+    os << "]";
+    return os;
+}
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vi notes(n);
-    fillv(notes, n);
-    int prev = notes[0];
-    for(int i = 1; i < n; i++){
-        int diff = abs(prev - notes[i]);
-        if(!(diff == 5 || diff == 7)){
-            cout << "NO" << endll;
-            return;
+    string s;
+    cin >> s;
+    int q;
+    cin >> q;
+    int n = s.size();
+    set<int> locs;
+    for(int i = 0; i < n - 3; i++){
+        if(s[i] == '1' && s[i + 1] == '1' && s[i + 2] == '0' && s[i + 3] == '0'){
+            locs.insert(i);
         }
-        prev = notes[i];
     }
-    cout << "YES" << endll;
+    for(int i = 0; i < q; i++){
+        int j;
+        char v;
+        cin >> j >> v;
+        j--;
+        if(n < 4){
+            cout << "NO" << endll;
+            continue;
+        }
+        if(s[j] == v){
+            cout << (locs.empty()? "NO" : "YES") << endll;
+            continue;
+        }
+        s[j] = v;
+        locs.erase(j - 3);
+        locs.erase(j - 2);
+        locs.erase(j - 1);
+        locs.erase(j);
+        if(s[j - 3] == '1' && s[j - 2] == '1' && s[j - 1] == '0' && s[j] == '0'){
+            locs.insert(j - 3);
+        }
+        if(s[j - 2] == '1' && s[j - 1] == '1' && s[j] == '0' && s[j + 1] == '0'){
+            locs.insert(j - 2);
+        }
+        if(s[j - 1] == '1' && s[j] == '1' && s[j + 1] == '0' && s[j + 2] == '0'){
+            locs.insert(j - 1);
+        }
+        if(s[j] == '1' && s[j + 1] == '1' && s[j + 2] == '0' && s[j + 3] == '0'){
+            locs.insert(j);
+        }
+        cout << (locs.empty()? "NO" : "YES") << endll;
+    }
+
 }
 
 int main()
