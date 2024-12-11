@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "Training_9e5bc604"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "${fileBasenameNoExtension}",
+            "projectName": "Training_9e5bc604"
+        },
+        {
             "name": "C++ Windows Debug",
             "type": "cppdbg",
             "request": "launch",

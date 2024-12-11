@@ -96,4 +96,5 @@
     },
     "C_Cpp.errorSquiggles": "enabled",
     "C_Cpp.default.compilerPath": "/mnt/c/Program Files/MSYS2/ucrt64/bin/gcc.exe",
+    "java.debug.settings.onBuildFailureProceed": true,
 }
