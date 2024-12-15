@@ -6,6 +6,20 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
+            "projectName": "Training_3f72ac03"
+        },
+        {
+            "type": "java",
+            "name": "main",
+            "request": "launch",
+            "mainClass": "main",
+            "projectName": "Training_3f72ac03"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
             "projectName": "Training_9e5bc604"
         },
         {
