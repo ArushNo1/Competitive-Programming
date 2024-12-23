@@ -50,7 +50,29 @@ void solve()
 {
 
 }
+// File 1: /t/Math/Binary_Exponentiation.cpp
 
+long long binExp(long long a, long long b) {
+  if (b == 0)
+    return 1;
+
+  long long res = binExp(a, b / 2) % MOD;
+  if (b & 1) {
+    return (a * ((res * res) % MOD)) % MOD;
+  } else
+    return (res * res) % MOD;
+}
+
+long long binExp(long long a, long long b, long long mod) {
+  if (b == 0)
+    return 1;
+
+  long long res = binExp(a, b / 2) % mod;
+  if (b & 1) {
+    return (a * ((res * res) % mod)) % mod;
+  } else
+    return (res * res) % mod;
+}
 int main()
 {
     cin.tie(0); cout.tie(0);
@@ -60,9 +82,5 @@ int main()
     //int T = 1; cin >> T; for(int t = 0; t < T; t++) solve();
     int n;
     cin >> n;
-    ll ans = 1;
-    for(int i = 0; i < n; i++){
-        ans = (2 * ans) % MOD;
-    }
-    cout << ans;
+    cout << binExp(2, n) << endll;;
 }
