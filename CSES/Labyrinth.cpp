@@ -82,52 +82,64 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+struct node{
+    int r, c;
+};
+
+vi dx = {0, 0, 1, -1};
+vi dy = {1, -1, 0, 0};
+vi chars = {'R', 'L', 'D', 'U'};
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vvi adj(n + 1);
-    int m;
-    cin >> m;
-    for(int i = 0; i < m; i++){
-        int a, b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
-    }
-    vi pred(n + 1);
-    vb visited(n + 1);
-
-    queue<int> bfs;
-    bfs.push(1);
-    visited[1] = true;
-    while(!bfs.empty()){
-        int u = bfs.front();
-        bfs.pop();
-        for(int nb : adj[u]){
-            if(!visited[nb]){
-                visited[nb] = true;
-                pred[nb] = u;
-                bfs.push(nb);
+    int n, m;
+    cin >> n >> m;
+    int startr, startc, endr, endc;
+    vector<string> grid(n);
+    for(int i = 0; i < n; i++){
+        cin >> grid[i];
+        for(int j = 0; j < m; j++){
+            if(grid[i][j] == 'A'){
+                startr = i;
+                startc = j;
+            }
+            else if(grid[i][j] == 'B'){
+                endr = i;
+                endc = j;
             }
         }
     }
-    if(!visited[n]){
-        cout << "IMPOSSIBLE" << endll;
-        return;
+    vector<string> parent(n, string(m, ' '));
+    parent[startr][startc] = '*';
+    queue<node> bfs;
+    bfs.push({startr, startc});
+    while(!bfs.empty()){
+        node u = bfs.front();
+        bfs.pop();
+        if(u.r == endr && u.c == endc){
+            cout << "YES" << endll;
+            string path;
+            while(u.r != startr || u.c != startc){
+                int r = u.r, c = u.c;
+                int pr = parent[r][c] - '0';
+                path += chars[pr];
+                u.r -= dx[pr];
+                u.c -= dy[pr];
+            }
+            reverse(all(path));
+            cout << path.size() << endll;
+            cout << path << endll;
+            return;
+        }
+        for(int i = 0; i < 4; i++){
+            int r = u.r + dx[i], c = u.c + dy[i];
+            if(r >= 0 && r < n && c >= 0 && c < m && grid[r][c] != '#' && parent[r][c] == ' '){
+                parent[r][c] = i + '0';
+                bfs.push({r, c});
+            }
+        }
     }
-    vi path;
-    int u = n;
-    while(u != 1){
-        path.push_back(u);
-        u = pred[u];
-    }
-    path.push_back(1);
-    cout << path.size() << endll;
-    reverse(all(path));
-    for(int i = 0; i < path.size(); i++){
-        cout << path[i] << " ";
-    }
+    cout << "NO" << endll;
 }
 
 int main()

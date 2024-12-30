@@ -16,7 +16,7 @@ typedef vector<bool> vb;
 
 #define all(x) (x).begin(), (x).end()
 #define MOD ll(1e9+7)
-#define inf int(2e31-1)
+#define inf int(1e9)
 #define INF ll(2e63-1)
 #define EPS ld(1e-9)
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
@@ -84,57 +84,75 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
+    int benergy, eenergy, penergy;
+    int n, m;
+    cin >> benergy >> eenergy >> penergy >> n >> m;
+
     vvi adj(n + 1);
-    int m;
-    cin >> m;
     for(int i = 0; i < m; i++){
         int a, b;
         cin >> a >> b;
         adj[a].push_back(b);
         adj[b].push_back(a);
     }
-    vi pred(n + 1);
-    vb visited(n + 1);
+    vi distb(n + 1, inf);
+    distb[1] = 0;
+    vi diste(n + 1, inf);
+    diste[2] = 0;
+    vi distn(n + 1, inf);
+    distn[n] = 0;
 
     queue<int> bfs;
     bfs.push(1);
-    visited[1] = true;
     while(!bfs.empty()){
         int u = bfs.front();
         bfs.pop();
         for(int nb : adj[u]){
-            if(!visited[nb]){
-                visited[nb] = true;
-                pred[nb] = u;
+            if(distb[nb] == inf){
+                distb[nb] = distb[u] + 1;
                 bfs.push(nb);
             }
         }
     }
-    if(!visited[n]){
-        cout << "IMPOSSIBLE" << endll;
-        return;
+
+    bfs.push(2);
+    while(!bfs.empty()){
+        int u = bfs.front();
+        bfs.pop();
+        for(int nb : adj[u]){
+            if(diste[nb] == inf){
+                diste[nb] = diste[u] + 1;
+                bfs.push(nb);
+            }
+        }
     }
-    vi path;
-    int u = n;
-    while(u != 1){
-        path.push_back(u);
-        u = pred[u];
+
+    bfs.push(n);
+    while(!bfs.empty()){
+        int u = bfs.front();
+        bfs.pop();
+        for(int nb : adj[u]){
+            if(distn[nb] == inf){
+                distn[nb] = distn[u] + 1;
+                bfs.push(nb);
+            }
+        }
     }
-    path.push_back(1);
-    cout << path.size() << endll;
-    reverse(all(path));
-    for(int i = 0; i < path.size(); i++){
-        cout << path[i] << " ";
+
+    int dist = inf;
+    for(int i = 1; i <= n; i++){
+        dist = min(dist, distb[i] * benergy + diste[i] * eenergy + distn[i] * penergy);
     }
+
+
+    cout << dist << endll;
 }
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);  
-
+    open("piggyback");
     ll T = 1;
     //cin >> T;
     for(ll t = 0; t < T; t++){

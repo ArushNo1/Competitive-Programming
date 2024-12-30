@@ -81,60 +81,43 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
+// File 1: /t/DSA/Longest_Increasing_Subsequence.cpp
+
+int find_lis(const vector<pair<int, int>> &a) {
+	vector<int> dp;
+	for (const pair<int, int>& q : a) {
+        int i = q.second;
+		int pos = lower_bound(dp.begin(), dp.end(), i) - dp.begin();
+		if (pos == dp.size()) {
+			dp.push_back(i);
+		} else {
+			dp[pos] = i;
+		}
+	}
+	return dp.size();
+}
 
 void solve(int num_tc)
 {
     int n;
     cin >> n;
-    vvi adj(n + 1);
-    int m;
-    cin >> m;
-    for(int i = 0; i < m; i++){
-        int a, b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
+    vector<pair<int, int>> nums(n);
+    for(int i = 0; i < n; i++){
+        cin >> nums[i].first;
+        cin >> nums[i].second;
+        nums[i].second = -nums[i].second;
     }
-    vi pred(n + 1);
-    vb visited(n + 1);
-
-    queue<int> bfs;
-    bfs.push(1);
-    visited[1] = true;
-    while(!bfs.empty()){
-        int u = bfs.front();
-        bfs.pop();
-        for(int nb : adj[u]){
-            if(!visited[nb]){
-                visited[nb] = true;
-                pred[nb] = u;
-                bfs.push(nb);
-            }
-        }
-    }
-    if(!visited[n]){
-        cout << "IMPOSSIBLE" << endll;
-        return;
-    }
-    vi path;
-    int u = n;
-    while(u != 1){
-        path.push_back(u);
-        u = pred[u];
-    }
-    path.push_back(1);
-    cout << path.size() << endll;
-    reverse(all(path));
-    for(int i = 0; i < path.size(); i++){
-        cout << path[i] << " ";
-    }
+    sort(all(nums));
+    int ans = find_lis(nums);
+    cout << ans << endll;
 }
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);  
-
+    ifstream cin("pcb.in");
+	ofstream cout("pcb.out");
     ll T = 1;
     //cin >> T;
     for(ll t = 0; t < T; t++){
