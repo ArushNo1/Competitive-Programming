@@ -84,37 +84,51 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
+    int n; 
     cin >> n;
-    vll people(n);
-    ll sum = 0;
+    vi l(n);
+    vi r(n);
+
+    set<int> badnums;
+    vi forced(2 * n + 1);
+    vi pref(2 * n + 2);
+    pref[0] = 0;
+
     for(int i = 0; i < n; i++){
-        cin >> people[i];
-        sum += people[i];
+        cin >> l[i] >> r[i];
+        if(l[i] == r[i]){
+            if(forced[l[i]] == 1){
+                badnums.insert(l[i]);
+            }
+            forced[l[i]] = 1;
+        }
     }
 
-    if(n <= 2){
-        cout << -1 << endll;
-        return;
+    for(int i = 1; i < pref.size(); i++){
+        pref[i] = pref[i - 1] + forced[i - 1];
     }
-    sort(all(people));
-    auto willrobincome = [&](ll x){
-        return ((sum + x) > (2 * n * people[n / 2]));
-    };
 
-    ll low = 0, high = 1e13;
-    while(low < high){
-        ll mid = low + (high - low) / 2;
-        if(willrobincome(mid)){
-            high = mid;
+    string res = "";
+    for(int i = 0; i < n; i++){
+        if(l[i] == r[i]){
+            if(badnums.count(l[i])){
+                res.push_back('0');
+            }
+            else{
+                res.push_back('1');
+            }
+            continue;
+        }
+        int numforced = pref[r[i] + 1] - pref[l[i]];
+        if(numforced < (r[i] - l[i] + 1)){
+            res.push_back('1');
         }
         else{
-            low = mid + 1;  
+            res.push_back('0');
         }
     }
-    cout << low << endll;
+    cout << res << endll;
 }
-
 
 int main()
 {

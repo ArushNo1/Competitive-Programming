@@ -86,35 +86,21 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    vll people(n);
-    ll sum = 0;
-    for(int i = 0; i < n; i++){
-        cin >> people[i];
-        sum += people[i];
-    }
-
-    if(n <= 2){
-        cout << -1 << endll;
-        return;
-    }
-    sort(all(people));
-    auto willrobincome = [&](ll x){
-        return ((sum + x) > (2 * n * people[n / 2]));
-    };
-
-    ll low = 0, high = 1e13;
-    while(low < high){
-        ll mid = low + (high - low) / 2;
-        if(willrobincome(mid)){
-            high = mid;
+    vi arr(n);
+    fillv(arr, n);
+    for(int i = 0; i < n - 1; i ++){
+        int a = arr[i];
+        int b = arr[i + 1];
+        if(a > b){
+            swap(a, b);
         }
-        else{
-            low = mid + 1;  
+        if(2 * a > b){
+            cout << "YES" << endll;
+            return;
         }
     }
-    cout << low << endll;
+    cout << "NO" << endll;
 }
-
 
 int main()
 {

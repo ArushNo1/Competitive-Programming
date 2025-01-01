@@ -82,39 +82,33 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
-void solve(int num_tc)
-{
-    int n;
-    cin >> n;
-    vll people(n);
-    ll sum = 0;
-    for(int i = 0; i < n; i++){
-        cin >> people[i];
-        sum += people[i];
+int absmax(int a, int b){
+    if(abs(a) > abs(b)){
+        return abs(a);
     }
-
-    if(n <= 2){
-        cout << -1 << endll;
-        return;
-    }
-    sort(all(people));
-    auto willrobincome = [&](ll x){
-        return ((sum + x) > (2 * n * people[n / 2]));
-    };
-
-    ll low = 0, high = 1e13;
-    while(low < high){
-        ll mid = low + (high - low) / 2;
-        if(willrobincome(mid)){
-            high = mid;
-        }
-        else{
-            low = mid + 1;  
-        }
-    }
-    cout << low << endll;
+    return abs(b);
 }
 
+void solve(int num_tc)
+{
+    int n, k;
+    cin >> n >> k;
+    vi a(n);
+    int sum = 0;
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+        sum += a[i];
+    }
+    int ans = 0;
+    for(int b = 0; b < k; b++){
+        int tsum = 0;
+        for(int c = b; c < n; c += k){
+            tsum += a[c];
+        }
+        ans = absmax(ans, sum - tsum);
+    }
+    cout << ans << endll;
+}
 
 int main()
 {
@@ -122,7 +116,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

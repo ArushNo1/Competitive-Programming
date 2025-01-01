@@ -82,39 +82,50 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+#define oreq(a, b) a = (a) || (b);
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vll people(n);
-    ll sum = 0;
+    ll n, desiredsum;
+    cin >> n >> desiredsum;
+    vll coins(n);
+    fillv(coins, n);
+    sort(all(coins));
+
+    vector<vector<vector<bool>>> dp(n + 1, vector<vector<bool>>(desiredsum + 1, vector<bool>(desiredsum + 1, false)));
+    //dp[i][j][k] is if it's possible to use the first i coins, making sum j, with subset sum k
+    dp[0][0][0] = true;
     for(int i = 0; i < n; i++){
-        cin >> people[i];
-        sum += people[i];
-    }
+        for(int j = 0; j <= desiredsum; j++){
+            for(int k = 0; k <= j; k++){
+                //don't add the coin in
+                oreq(dp[i + 1][j][k], dp[i][j][k]);
 
-    if(n <= 2){
-        cout << -1 << endll;
-        return;
-    }
-    sort(all(people));
-    auto willrobincome = [&](ll x){
-        return ((sum + x) > (2 * n * people[n / 2]));
-    };
-
-    ll low = 0, high = 1e13;
-    while(low < high){
-        ll mid = low + (high - low) / 2;
-        if(willrobincome(mid)){
-            high = mid;
-        }
-        else{
-            low = mid + 1;  
+                if((j + coins[i]) <= desiredsum){
+                    //add the coin in, with existing sums
+                    oreq(dp[i + 1][j + coins[i]][k], dp[i][j][k]);
+                    if((k + coins[i]) <= desiredsum){
+                        //add the coin in, with extra sums
+                        oreq(dp[i + 1][j + coins[i]][k + coins[i]], dp[i][j][k]);    
+                    }
+                }
+            }
         }
     }
-    cout << low << endll;
+    
+
+    vi result;
+    for(int i = 0; i <= desiredsum; i++){
+        if(dp[n][desiredsum][i]){
+            result.push_back(i);
+        }
+    }
+    cout << result.size() << endll;
+    for(int i = 0; i < result.size(); i++){
+        cout << result[i] << " ";
+    }
+    cout << endll;
 }
-
 
 int main()
 {
@@ -122,7 +133,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

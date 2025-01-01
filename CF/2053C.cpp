@@ -82,39 +82,49 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
-void solve(int num_tc)
-{
-    int n;
-    cin >> n;
-    vll people(n);
-    ll sum = 0;
-    for(int i = 0; i < n; i++){
-        cin >> people[i];
-        sum += people[i];
-    }
+ll k;
 
-    if(n <= 2){
-        cout << -1 << endll;
-        return;
-    }
-    sort(all(people));
-    auto willrobincome = [&](ll x){
-        return ((sum + x) > (2 * n * people[n / 2]));
-    };
-
-    ll low = 0, high = 1e13;
-    while(low < high){
-        ll mid = low + (high - low) / 2;
-        if(willrobincome(mid)){
-            high = mid;
-        }
-        else{
-            low = mid + 1;  
-        }
-    }
-    cout << low << endll;
+bool ispow2(ll n) {
+    return n > 0 && (n & (n - 1)) == 0;
 }
 
+ll dfs(ll l, ll r){
+    ll len = r - l + 1;
+    if(len < k){
+        return 0LL;
+    }
+    if(ispow2(len)){
+        if(k != 1){
+            return 0LL;
+        }
+        return ((r * (r + 1)) - (l * (l - 1))) / 2LL;
+    }
+    ll m = (l + r) / 2LL;
+    if(len % 2LL == 0){
+        return dfs(l, m) + dfs(m + 1, r);
+    }
+    else{
+        return m + dfs(l, m - 1) + dfs(m + 1, r);
+    }
+}
+
+void solve(int num_tc)
+{
+    ll n;
+    cin >> n >> k;
+    ll num = (n + 1) / 2;
+    ll half = (n + 1) % 2;
+    ll ans = 0;
+    ll mult = 1;
+    while(n >= k){
+        if(n % 2 == 1){
+            ans += num * mult + half * mult / 2;
+        }
+        n /= 2;
+        mult *= 2;
+    }
+    cout << ans << endll;
+}
 
 int main()
 {

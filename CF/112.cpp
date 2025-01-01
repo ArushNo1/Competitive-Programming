@@ -84,37 +84,18 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vll people(n);
-    ll sum = 0;
-    for(int i = 0; i < n; i++){
-        cin >> people[i];
-        sum += people[i];
+    ll a, b;
+    cin >> a >> b;
+    ll ab = 1;
+    for(int i = 0; i < b; i++){
+        ab *= a;
     }
-
-    if(n <= 2){
-        cout << -1 << endll;
-        return;
+    ll ba = 1;
+    for(int i = 0; i < a; i++){
+        ba *= b;
     }
-    sort(all(people));
-    auto willrobincome = [&](ll x){
-        return ((sum + x) > (2 * n * people[n / 2]));
-    };
-
-    ll low = 0, high = 1e13;
-    while(low < high){
-        ll mid = low + (high - low) / 2;
-        if(willrobincome(mid)){
-            high = mid;
-        }
-        else{
-            low = mid + 1;  
-        }
-    }
-    cout << low << endll;
+    cout << (ab - ba) << endll;
 }
-
 
 int main()
 {
@@ -122,7 +103,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
