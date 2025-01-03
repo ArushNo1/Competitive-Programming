@@ -82,28 +82,35 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+// File 1: /t/Math/Binary_Exponentiation.cpp
+
+long long binExp(long long a, long long b) {
+  if (b == 0)
+    return 1;
+
+  long long res = binExp(a, b / 2) % MOD;
+  if (b & 1) {
+    return (a * ((res * res) % MOD)) % MOD;
+  } else
+    return (res * res) % MOD;
+}
+
+long long binExp(long long a, long long b, long long mod) {
+  if (b == 0)
+    return 1;
+
+  long long res = binExp(a, b / 2) % mod;
+  if (b & 1) {
+    return (a * ((res * res) % mod)) % mod;
+  } else
+    return (res * res) % mod;
+}
+
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
-    }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
-            }
-        }
-    }
-    cout << endll;
+    ll n, k;
+    cin >> n >> k;
+    cout << binExp(n, k) << endll;
 }
 
 int main()

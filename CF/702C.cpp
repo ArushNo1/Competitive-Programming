@@ -129,10 +129,7 @@ int main()
     cin.tie(0); cout.tie(0);
     ios::sync_with_stdio(false);
     ios_base::sync_with_stdio(0);
-    
-	
-	//open("abc");
-    //int T = 1; cin >> T; for(int t = 0; t < T; t++) solve();
+
     int n, m;
     cin >> n >> m;
     
@@ -144,26 +141,16 @@ int main()
 
 	int c = 0, t = 0;
 	ll max_dist = 0;
-	//dbg(max_dist);
-	//dbg(max_dist);
 
 	for(; c < n; c++){
-		//dbg(c);
 		ll city = cities[c];
-		//dbg(city);
 		while(t < m && towers[t] < city){
-			//dbg(t);
-			//dbg(towers[t]);
 			t++;
 		}
-		//t is at the first element >= to the current city
-		//t - 1 is the last element < current city;
 		if(t > 0){
 			max_dist = max(min(abs(towers[t] - city), abs(city - towers[t - 1])), max_dist);
-			//dbg(max_dist);
 		}else{
 			max_dist = max(abs(towers[t] - city), max_dist);
-			//dbg(max_dist);
 		}
 	}
 

@@ -84,27 +84,25 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
-    }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
+    ll n;
+    cin >> n;
+    ll ans = 0;
+    ll num = 1;
+    while(num <= n){        
+        for(int i = 1; i <= 9; i++){
+            if(num * i <= n){
+                ans++;
+            }
+            else{
+                cout << ans << endll;
+                return;
             }
         }
+        num = num * 10 + 1;
     }
-    cout << endll;
+    cout << ans << endll;
 }
+
 
 int main()
 {

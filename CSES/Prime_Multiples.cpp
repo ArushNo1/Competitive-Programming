@@ -82,28 +82,40 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+vll primes;
+vll subset;
+ll ans = 0;
+ll n, k;
+
+void generate(int index){
+    if(index == k){
+        if(subset.size() == 0){
+            return;
+        }
+        ll mult = 1;
+        for(ll p : subset){
+            if(mult > n / p){
+                return;
+            }
+            mult *= p;
+        }
+        ans += ((subset.size() % 2 == 0)? -1 : 1) * (n / mult);
+        return;
+    }
+    subset.push_back(primes[index]);
+    generate(index + 1);
+    subset.pop_back();
+    generate(index + 1);
+}
+
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
-    }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
-            }
-        }
-    }
-    cout << endll;
+    cin >> n >> k;
+    primes = vll(k);
+    fillv(primes, k);
+    sort(all(primes));
+    generate(0);
+    cout << ans << endll;
 }
 
 int main()
@@ -112,7 +124,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

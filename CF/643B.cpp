@@ -84,26 +84,7 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
-    }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
-            }
-        }
-    }
-    cout << endll;
+
 }
 
 int main()
@@ -112,7 +93,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

@@ -82,28 +82,37 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+vvi adj;
+vb visited;
+
+void dfs(int node){
+    if(visited[node]){
+        return;
+    }
+    visited[node] = true;
+    for(int nb : adj[node]){
+        dfs(nb);
+    }
+}
+
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
+    int n;
+    cin >> n;
+    adj = vvi(n+1);
+    for(int i = 0; i < n - 1; i++){
+        int a, b;
+        cin >> a >> b;
+        adj[b].push_back(a);
     }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
-            }
+    for(int i = 1; i <= n; i++){
+        visited = vb(n+1, false);
+        dfs(i);
+        if(count(all(visited), true) == n){
+            cout << i << endll;
+            return;
         }
     }
-    cout << endll;
 }
 
 int main()
@@ -112,7 +121,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

@@ -84,26 +84,24 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
+    int n;
+    cin >> n;
+    ll sumpow2 = 0;
+    map<ll, ll> counts;
     for(int i = 0; i < n; i++){
-        cin >> grid[i];
-    }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
+        ll x;
+        cin >> x;
+        ll num = 0;
+        while(x % 2 == 0){
+            x /= 2;
+            num++;
         }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
-            }
-        }
+        counts[x] = max(counts[x], num);
     }
-    cout << endll;
+    for(auto& x : counts){
+        sumpow2 += x.second;
+    }
+    cout << sumpow2 << endll;
 }
 
 int main()

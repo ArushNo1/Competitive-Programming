@@ -84,26 +84,33 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
-    }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
+    int n;
+    cin >> n;
+    n *= 2;
+    vi people(n);
+    fillv(people, n);
+    sort(all(people));
+    ll mintotal = INF;
+    for(int b1 = 0; b1 < n; b1++){
+        for(int b2 = 0; b2 < b1; b2++){
+            ll total = 0;
+            ll prev = -1;
+            for(int i = 0; i < n; i++){
+                if(i == b1 || i == b2){
+                    continue;
+                }
+                if(prev == -1){
+                    prev = people[i];
+                }
+                else{
+                    total += people[i] - prev;
+                    prev = -1;
+                }
             }
+            mintotal = min(mintotal, total);
         }
     }
-    cout << endll;
+    cout << mintotal << endll;
 }
 
 int main()
@@ -112,7 +119,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

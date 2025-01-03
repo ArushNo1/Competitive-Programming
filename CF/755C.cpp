@@ -24,7 +24,7 @@ typedef vector<bool> vb;
 template <typename T>
 ostream& operator<< (ostream& os, const vector<T>& arr){
 	os << "[";
-    for(const T x : arr){
+    for(const T& x : arr){
 		os << x << " ";
 	}
 	os << "]";
@@ -82,28 +82,40 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+vi visited;
+vvi adj;
+
+void dfs(int node){
+    if(visited[node]){
+        return;
+    }
+    visited[node] = true;
+    for(int nb : adj[node]){
+        dfs(nb);
+    }
+}
 void solve(int num_tc)
 {
-    int n, m;
-    cin >> n >> m;
-    n = 2 * n - 1;
-    vector<string> grid(n);
-    for(int i = 0; i < n; i++){
-        cin >> grid[i];
+    int n;
+    cin >> n;
+    vi relative(n);
+    fillv(relative, n);
+
+    adj = vvi(n + 1);
+    for(int i = 1; i <= n; i++){
+        adj[relative[i-1]].push_back(i);
+        adj[i].push_back(relative[i-1]);
     }
-    for(int j = 0; j < m; j++){
-        vi freq(26);
-        for(int i = 0; i < n; i++){
-            freq[grid[i][j] - 'a'] ^= 1;
-        }
-        for(int i = 0; i < 26; i++){
-            if(freq[i]){
-                cout << char(i + 'a');
-                break;
-            }
+    
+    int connected = 0;
+    visited = vi(n + 1, 0);
+    for(int i = 1; i <= n; i++){
+        if(!visited[i]){
+            dfs(i);
+            connected++;
         }
     }
-    cout << endll;
+    cout << connected << endll;
 }
 
 int main()
@@ -112,7 +124,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
