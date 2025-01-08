@@ -81,56 +81,31 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
-
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
-    }
-}
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
+    ll n, m;
+    cin >> n >> m;
+    vvi tiles(n);
     for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        tiles[i] = {a, b, c, d};
+        
+    }
+    if(m & 1){
+        cout << "NO" << endll;
+        return;
     }
 
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
+    for(int i = 0; i < n; i++){
+        int b = tiles[i][1], c = tiles[i][2];
+        if(b == c){
+            cout << "YES" << endll;
+            return;
         }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
     }
-    cout << total << endll;
+    cout << "NO" << endll;
 }
 
 int main()

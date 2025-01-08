@@ -81,56 +81,51 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
 
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
+bool issquare(ll s){
+    ll low = 0, high = s;
+    while(low <= high){
+        int mid = (low + high) / 2;
+        if(mid * mid == s) return true;
+        if(mid * mid > s) high = mid - 1;
+        else low = mid + 1;
     }
+    return false;
 }
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
+    ll m, s;
+    cin >> m >> s;
+    set<ll> perm;
+    ll n = 1;
+    ll sum = 0;
+    for(int i = 0; i < m; i++){
+        ll q;
+        cin >> q;
+        perm.insert(q);
+        n = max(n, q);
+        sum += q;
+    }
     for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
-    }
-
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
+        if(!perm.count(i + 1)){
+            s -= i + 1;
         }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
     }
-    cout << total << endll;
+    for(int i = n + 1; s > 0; i++){
+        s -= i;
+        if(s == 0){
+            cout << "YES" << endll;
+            return;
+        }
+    }
+    if(s == 0){
+        cout << "YES" << endll;
+        return;
+    }
+    
+    
+    cout << "NO" << endll;
 }
 
 int main()

@@ -81,56 +81,73 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
+// File 1: /t/Debugging/setdbg.cpp
+
+template <typename T>
+ostream& operator<< (ostream& os, const set<T>& arr){
+	os << "[";
+    for(const T x : arr){
+		os << x << " ";
 	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
-
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
-    }
+	os << "]";
+    return os;
 }
 
+template <typename T>
+ostream& operator<< (ostream& os, const multiset<T>& arr){
+    os << "[";
+    for(const T x : arr){
+        os << x << " ";
+    }
+    os << "]";
+    return os;
+}
+
+template <typename T>
+ostream& operator<< (ostream& os, const unordered_set<T>& arr){
+    os << "[";
+    for(const T x : arr){
+        os << x << " ";
+    }
+    os << "]";
+    return os;
+}
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
-    for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
-    }
+    ll n;
+    cin >> n;
+    vll arr(n);
+    vll pref(n + 1);
+    for(ll i = 0; i < n ;i++){
+        cin >> arr[i];
+        pref[i + 1] = pref[i] + arr[i];
+    }        
 
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
+    map<ll, ll> prefvals;
+    vector<pair<ll, ll>> segments;
+    for(ll i = 0; i <= n; i++){
+        if(prefvals.count(pref[i]) == 0){
+            prefvals[pref[i]] = i;
             continue;
         }
-        if(k - i > z){
+        segments.push_back({prefvals[pref[i]], i - 1});
+        prefvals[pref[i]] = i;
+    }
+    if(segments.size() == 0){
+        cout << 0 << endll;
+        return;
+    }
+    set<ll> points;
+    for(ll i = 0; i < segments.size(); i++){
+        if(points.upper_bound(segments[i].first) != points.end()){
             continue;
         }
-        total = (total + zC[k -i] * oC[i]) % MOD;
+        else{
+            points.insert(segments[i].second);
+        }
     }
-    cout << total << endll;
+    cout << points.size() << endll;
+    
 }
 
 int main()
@@ -139,7 +156,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

@@ -81,56 +81,27 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
-
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
-    }
-}
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
-    for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
+    int n, q;
+    cin >> n >> q;
+    
+    map<ii, int> xy;
+    map<ii, int> xz;
+    map<ii, int> yz;
+    int counter = 0;
+    for(int i = 0; i < q; i++){
+        int a, b, c;
+        cin >> a >> b >> c;
+        xy[{a, b}]++;
+        xz[{a, c}]++;
+        yz[{b, c}]++;
+        counter += xy[{a, b}] == n;
+        counter += xz[{a, c}] == n;
+        counter += yz[{b, c}] == n;
+        cout << counter << endll;
     }
-
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
-        }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
-    }
-    cout << total << endll;
 }
 
 int main()
@@ -139,7 +110,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

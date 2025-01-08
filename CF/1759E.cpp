@@ -81,56 +81,44 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
 
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
+int simulate(ll n, ll h, const vll& a, const vll& mults){
+    int m = 0;
+    for(int i = 0; i < n; i++){
+        while(h <= a[i]){
+            if(m == 3){
+                return i;
+            }
+            h *= mults[m];
+            m++;
+        }
+        h += a[i] / 2;
     }
+    return n; 
 }
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
-    for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
-    }
+    ll n, H;
+    cin >> n >> H;
 
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
+    vector<vll> allmults = {
+        {2, 2, 3},
+        {2, 3, 2},
+        {3, 2, 2},
+    };
 
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
-        }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
+    vll a(n);
+    fillv(a, n);
+    sort(all(a));
+
+    int ans = 0;
+
+    for(int j = 0; j < 3; j++){
+        vll mults = allmults[j];
+        ans = max(ans, simulate(n, H, a, mults));
     }
-    cout << total << endll;
+    cout << ans << endll;
 }
 
 int main()

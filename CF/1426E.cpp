@@ -81,56 +81,68 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
 
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
+
+ll calc_score(vll& aorder, vll& border, vll amoves, vll bmoves){
+    ll a = 0;
+    ll b = 0;
+    ll score = 0;
+    auto eval = [](ll p1, ll p2){
+        if(p1 == p2){
+            return 0;
+        }
+        if(p1 == 0 && p2 == 1){
+            return 1;
+        }
+        if(p1 == 1 && p2 == 2){
+            return 1;
+        }
+        if(p1 == 2 && p2 == 0){
+            return 1;
+        }
+        return 0;
+    };
+
+    
+    while(a < 3 && b < 3){
+        ll games = min(amoves[aorder[a]], bmoves[border[b]]);
+        amoves[aorder[a]] -= games;
+        bmoves[border[b]] -= games;
+        score += games * eval(aorder[a], border[b]);
+        if(amoves[aorder[a]] == 0){
+            a++;
+        }
+        if(bmoves[border[b]] == 0){
+            b++;
+        }
     }
+    return score;
 }
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
-    for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
-    }
+    ll n;
+    cin >> n;
+    vll a = {0, 1, 2};
+    vll b = {0, 1, 2};
+    vll amoves(3);
+    vll bmoves(3);
+    fillv(amoves, 3);
+    fillv(bmoves, 3);
 
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
-        }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
-    }
-    cout << total << endll;
+    //0 wins over 1
+    sort(all(a));
+    sort(all(b));
+    ll max_score = 0;
+    ll min_score = 2e9;
+    do{
+        do{
+            ll score = calc_score(a, b, amoves, bmoves);
+            max_score = max(max_score, score);
+            min_score = min(min_score, score);
+        }while(next_permutation(all(a)));
+    }while(next_permutation(all(b)));
+    cout << min_score << " " << max_score << endll;
 }
 
 int main()
@@ -139,7 +151,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

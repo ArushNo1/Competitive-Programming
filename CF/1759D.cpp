@@ -81,56 +81,60 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
 
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
+pll factor(ll n){
+    pll result;
+    while(n % 2 == 0){
+        result.first++;
+        n /= 2;
     }
+    while(n % 5 == 0){
+        result.second++;
+        n /= 5;
+    }
+    return result;
+}
+
+ll pow10(pll a, pll b){
+    return min(a.first + b.first, a.second + b.second);
 }
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
-    for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
-    }
+    ll n, m;
+    cin >> n >> m;
+    
 
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
+    pll fact = factor(n);
 
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
+    ll best = 0;
+
+    for(int i = 1; i < 18; i++){
+        ll twosneeded = i - fact.first;
+        ll fivesneeded = i - fact.second;
+        if(twosneeded <= 0 && fivesneeded <= 0){
             continue;
         }
-        if(k - i > z){
-            continue;
+        ll mink = 1;
+        for(int j = 0; j < twosneeded; j++){
+            mink *= 2;
         }
-        total = (total + zC[k -i] * oC[i]) % MOD;
+        for(int j = 0; j < fivesneeded; j++){
+            mink *= 5;
+        }
+        if(mink > m){
+            break;
+        }
+        ll k = (m / mink) * mink;
+        best = n * k;
     }
-    cout << total << endll;
+    if(best == 0){
+        cout << n * m << endll;
+        return;
+    }
+    cout << best << endll;
+   
+    return;
 }
 
 int main()

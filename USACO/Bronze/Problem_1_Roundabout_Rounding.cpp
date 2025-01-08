@@ -81,56 +81,57 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
-
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
-    }
-}
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
-    for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
+    string s;
+    cin >> s;
+    int n = s.size();
+    if(n == 1){
+        cout << 0 << endll;
+        return;
     }
-
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
+    if(s[0] < '4' || ((s[0] == '4') && (s[1] < '4'))){
+        ll sum = 0;
+        ll pow10 = 1;
+        for(ll i = n - 2; i > 0; i--){
+            sum += i * pow10;
+            pow10 *= 10;
         }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
+        cout << sum * 5 << endll;
+        return;
     }
-    cout << total << endll;
+    if(s[0] >= '5'){
+        ll sum = 0;
+        ll pow10 = 1;
+        for(ll i = n - 1; i > 0; i--){
+            sum += i * pow10;
+            pow10 *= 10;
+        }
+        cout << sum * 5 << endll;
+        return;
+    }
+    if(s[0] == '4'){
+        string t = "4";
+        for(int i = 1; i < n; i++){
+            t.push_back('4');
+        }
+        t.back() = '5';
+        int a = stoi(s);
+        int b = stoi(t);
+        if(b > a){
+            b = a + 1;
+        }
+        ll sum = 0;
+        ll pow10 = 1;
+        for(ll i = n - 2; i > 0; i--){
+            sum += i * pow10;
+            pow10 *= 10;
+        }
+        cout << sum * 5 + (a - b + 1)<< endll;
+        return;
+    }
+    cout << 0 << endll;
 }
 
 int main()

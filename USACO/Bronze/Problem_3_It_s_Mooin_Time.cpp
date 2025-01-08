@@ -1,6 +1,7 @@
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
+#include <alldebug.h>
 using namespace std;
 
 typedef vector<int> vi;
@@ -19,7 +20,11 @@ typedef vector<bool> vb;
 #define inf int(1e9+1)
 #define INF ll(1e18+1)
 #define EPS ld(1e-9)
-#define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
+#ifdef DEBUG
+    #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
+#else
+    #define dbg(x)
+#endif
 
 template <typename T>
 ostream& operator<< (ostream& os, const vector<T>& arr){
@@ -81,56 +86,36 @@ inline void open(string name){
     freopen((name + ".in").c_str(), "r", stdin);
 	freopen((name + ".out").c_str(), "w", stdout);
 }
-ll invMod(ll x) {
-  if (x <= 1) {
-    return x;
-  }
-  return MOD - MOD / x * invMod(MOD % x) % MOD;
-}
-void allbinom(ll n, ll m, vll& result) {
-	if (m == -1){
-		m = MOD;
-	}
-    result.clear(); 
-    ll value = 1; 
-    result.push_back(value);
-
-    for (ll k = 1; k <= n; ++k) {
-        value = value * (n - k + 1) % MOD;
-        value = value * invMod(k) % MOD; 
-        result.push_back(value);
-    }
-}
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    int z = 0;
-    int o = 0;
+    int n, f;
+    cin >> n >> f;
+    string s;
+    cin >> s;
+    map<pair<char, char>, int> realmoos;
+    set<pair<char, char>> fakemoos;
     for(int i = 0; i < n; i++){
-        int x;
-        cin >> x;
-        if(x == 0) z += 1;
-        else o += 1;
-    }
-
-    vll zC;
-    allbinom(z, -1, zC);
-    vll oC;
-    allbinom(o, -1, oC);
-
-    ll total = 0;
-    for(int i = k / 2 + 1; i <= k; i++){
-        if(i > o){
-            continue;
+        if(s[i] != s[i + 1]){
+            fakemoos.insert({s[i], s[i + 1]});
+            if(s[i + 1] == s[i + 2]){
+                realmoos[{s[i], s[i + 1]}]++;
+            }
         }
-        if(k - i > z){
-            continue;
-        }
-        total = (total + zC[k -i] * oC[i]) % MOD;
     }
-    cout << total << endll;
+    multiset<pair<char, char>> bessiemoos;
+    for(const auto& [c, x] : realmoos){
+        if(x >= f){
+            bessiemoos.insert(c);
+        }
+        else if(x == f - 1){
+            int cnt = fakemoos.count({c.first, c.second});
+            if(cnt > 1){
+                bessiemoos.insert(c);
+            }
+        }
+    }
+    dbg(bessiemoos);
 }
 
 int main()
@@ -139,7 +124,7 @@ int main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
