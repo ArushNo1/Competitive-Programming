@@ -57,33 +57,59 @@ inline void open(string name){
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
 //edit for specific DS
+#include <vectordbg.h>
 #include <alldebug.h>
 #endif
 
+ostream& operator<<(ostream& os, const vector<pll> arr) {
+    os << "[";
+    for (size_t i = 0; i < arr.size(); ++i) {
+        //os << arr[i] << " ";
+    }
+    os << "]";
+    return os;
+}
+
+
 void solve(int num_tc)
 {
-    int a, b, c, d;
-    cin >> a >> b >> c >> d;
-    int prev = 0;
-    //1: red
-    //2: blue
-    for(int i = 1; i <= 12; i++){
-        int tmp = 0;
-        if(i == a || i == b){
-            tmp = 1;
-        }
-        else if(i == c || i == d){
-            tmp = 2;
-        }
-        if(tmp == prev && tmp != 0){
-            cout << "NO" << endll;
-            return;
-        }
-        if(tmp != 0){
-            prev = tmp;
-        }
+    int n;
+    cin >> n;
+    vector<pll> nums(n);
+    for(int i = 0; i < n; i++){
+        cin >> nums[i].first;
+        nums[i].second = nums[i].first & 3;
+        nums[i].first >>= 2;
     }
-    cout << "YES" << endll;
+    dbg(nums);
+    map<ll, vector<ll>> indeces;
+    map<ll, vector<ll>> residues;
+    for(int i = 0; i < n; i++){
+        indeces[nums[i].first].push_back(i);
+        residues[nums[i].first].push_back(nums[i].second);
+    }
+    for(auto &x : indeces){
+        sort(all(x.second));
+    }
+    for(auto &x : residues){
+        sort(all(x.second));
+    }
+    dbg(indeces);
+    dbg(residues);
+    map<ll, vector<ll>>::iterator indit = indeces.begin();
+    map<ll, vector<ll>>::iterator resit = residues.begin();
+    while(indit != indeces.end() && resit != residues.end()){
+        dbg(indit->second.size());
+        for(int i = 0; i < indit->second.size(); i++){
+            nums[indit->second[i]].second = resit->second[i];
+        }
+        indit++;
+        resit++;
+    }
+    for(int i = 0; i < n; i++){
+        cout << nums[i].first * 4 + nums[i].second << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()

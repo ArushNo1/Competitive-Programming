@@ -62,28 +62,20 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int a, b, c, d;
-    cin >> a >> b >> c >> d;
-    int prev = 0;
-    //1: red
-    //2: blue
-    for(int i = 1; i <= 12; i++){
-        int tmp = 0;
-        if(i == a || i == b){
-            tmp = 1;
+    string s;
+    cin >> s;
+    int n = s.size();
+    bool found = false;
+    int blocks = 0;
+    for(int i = 0; i < n; i++){
+        if(s[i] == '0' && s[i + 1] == '1'){
+            found = true;
         }
-        else if(i == c || i == d){
-            tmp = 2;
-        }
-        if(tmp == prev && tmp != 0){
-            cout << "NO" << endll;
-            return;
-        }
-        if(tmp != 0){
-            prev = tmp;
+        if(s[i] != s[i + 1]){
+            blocks++;
         }
     }
-    cout << "YES" << endll;
+    cout << blocks - found<< endll;
 }
 
 int32_t main()

@@ -62,28 +62,21 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int a, b, c, d;
-    cin >> a >> b >> c >> d;
-    int prev = 0;
-    //1: red
-    //2: blue
-    for(int i = 1; i <= 12; i++){
-        int tmp = 0;
-        if(i == a || i == b){
-            tmp = 1;
-        }
-        else if(i == c || i == d){
-            tmp = 2;
-        }
-        if(tmp == prev && tmp != 0){
-            cout << "NO" << endll;
+    string s;
+    cin >> s;
+    string t = s;
+    reverse(all(t));
+
+    char c = s[0];
+    for(int i = 1; i < (int) s.length(); i++){
+        if(s[i] != c){
+            cout << "YES" << endll;
+            swap(s[0], s[i]);
+            cout << s << endll;
             return;
         }
-        if(tmp != 0){
-            prev = tmp;
-        }
     }
-    cout << "YES" << endll;
+    cout << "NO" << endll;
 }
 
 int32_t main()

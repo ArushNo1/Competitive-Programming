@@ -60,30 +60,54 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
-void solve(int num_tc)
-{
-    int a, b, c, d;
-    cin >> a >> b >> c >> d;
-    int prev = 0;
-    //1: red
-    //2: blue
-    for(int i = 1; i <= 12; i++){
-        int tmp = 0;
-        if(i == a || i == b){
-            tmp = 1;
+ll isqrt(ll n){
+    ll low = 0, high = n;
+    while(low < high){
+        ll mid = low + (high - low + 1) / 2;
+        ll mid2 = mid * mid;
+        if(mid2 == n){
+            return mid;
         }
-        else if(i == c || i == d){
-            tmp = 2;
-        }
-        if(tmp == prev && tmp != 0){
-            cout << "NO" << endll;
-            return;
-        }
-        if(tmp != 0){
-            prev = tmp;
+        if(mid * mid <= n){
+            low = mid;
+        } else {
+            high = mid - 1;
         }
     }
-    cout << "YES" << endll;
+    return low;
+}
+
+void solve(int num_tc)
+{
+    ll r;
+    cin >> r;
+    if(r == 0){
+        cout << 1 << endll;
+        return;
+    }
+    ll r2l = r * r;
+    ll r2u = (r + 1) * (r + 1);
+    //find all x, y such that (r+1)^2 -x^2> y^2 >= r^2-x^2
+
+    ll ans = 0;
+    //y > 0, x > 0
+    ll y = r + 1;
+    for(ll x = 1; x * x < r2u; x++){
+        dbg(x);
+        while(x * x + y * y >= r2u){
+            y--;
+        }
+        while(x * x + y * y >= r2l){
+            dbg(y);
+            ans++;
+            y--;
+            if(y < 0){
+                break;
+            }
+        }
+        y++;
+    }
+    cout << ans * 4 << endll;
 }
 
 int32_t main()
