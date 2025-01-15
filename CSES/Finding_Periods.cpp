@@ -51,6 +51,40 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+// File 1: /t/DSA/Hashed_String.cpp
+
+
+class HashedString {
+  private:
+	// change M and B if you want
+	static const long long M = 1e9 + 9;
+	static const long long B = 9973;
+
+	// pow[i] contains B^i % M
+	static vector<long long> pow;
+
+	// p_hash[i] is the hash of the first i characters of the given string
+	vector<long long> p_hash;
+	
+  public:
+	HashedString(const string &s) : p_hash(s.size() + 1) {
+		while (pow.size() <= s.size()) { pow.push_back((pow.back() * B) % M); }
+		p_hash[0] = 0;
+		for (int i = 0; i < s.size(); i++) {
+			p_hash[i + 1] = ((p_hash[i] * B) % M + s[i]) % M;
+		}
+	}
+
+	// both ends are inclusive
+	long long get_hash(int start, int end) {
+		long long raw_val =
+		    (p_hash[end + 1] - (p_hash[start] * pow[end - start + 1]));
+		return (raw_val % M + M) % M;
+	}
+};
+
+vector<long long> HashedString::pow = {1};
+
 //comment to enable debugging
 #define dbg(x)
 
@@ -62,24 +96,34 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
+    string s;
+    cin >> s;
+    int n = s.size();
+    HashedString hs(s);
+    vi lens;
+    for(int len = 1; len <= n; len++){
+        int i = len;
+        ll hash = hs.get_hash(0, len - 1);
+        bool fail = false;
+        for(; i + len <= n; i+=len){
+            ll hash2 = hs.get_hash(i, i + len - 1);
+            if(hash != hash2){
+                fail = true;
+                break;
+            }
+        }
+        if(fail){
+            continue;
+        }
+        int lastlen = n - i;
+        if(hs.get_hash(i, n - 1) == hs.get_hash(0, lastlen - 1)){
+            lens.push_back(len);
         }
     }
-    cout << ans << endll;
+    for(int s : lens){
+        cout << s << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()
@@ -88,7 +132,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

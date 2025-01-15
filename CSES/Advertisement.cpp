@@ -62,22 +62,39 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
+    int n;
+    cin >> n;
+    vll fence(n);
+    fillv(fence, n);
+
+    vll left(n);
+    vll right(n);
+
+    stack<int> st;
+    st.push(0);
+    for(int i = 1; i < n; i++){
+        while(!st.empty() && fence[st.top()] >= fence[i]){
+            st.pop();
         }
+        left[i] = (st.empty())? 0 : st.top() + 1;
+        st.push(i);
+    }
+
+    while(!st.empty()){
+        st.pop();
+    }
+    st.push(n - 1);
+    for(int i = n - 2; i >= 0; i--){
+        while(!st.empty() && fence[st.top()] >= fence[i]){
+            st.pop();
+        }
+        right[i] = (st.empty())? n - 1 : st.top() - 1;
+        st.push(i);
+    }
+    right[n - 1] = n - 1;
+    ll ans = 0;
+    for(int i = 0; i < n; i++){
+        ans = max(ans, (right[i] - left[i] + 1) * fence[i]);
     }
     cout << ans << endll;
 }
@@ -88,7 +105,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

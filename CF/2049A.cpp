@@ -62,24 +62,35 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
+    int n;
+    cin >> n;
+    vi arr(n);
+    fillv(arr, n);
+
+    bool found = false;
+    for(int i = 0; i< n; i++){
+        if(arr[i] != 0){
+            found = true;
+            break;
         }
     }
-    cout << ans << endll;
+    if(!found){
+        cout << 0 << endll;
+        return;
+    }
+    
+    int nzcs = (arr[0] != 0);
+    for(int i = 1; i < n; i++){
+        if(arr[i] != 0 && arr[i - 1] == 0){
+            nzcs++;
+        }
+    }
+    if(nzcs > 1){
+        cout << 2 << endll;
+        return;
+    }
+    cout << 1 << endll;
+
 }
 
 int32_t main()

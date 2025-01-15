@@ -62,24 +62,48 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
+    int n;
+    cin >> n;
+    vi a(n);
+    ll asum = 0;
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+        asum += a[i];
+    }
+    vi b(n);
+    ll bsum = 0;
+    for(int i = 0; i < n; i++){
+        cin >> b[i];
+        bsum += b[i];
+    }
+    if(bsum > asum){
+        dbg("bsum > asum")
+        cout << "NO"<< endll;
+        return;
+    }
+    ll neededsum = 0;
+    vi needed(n);
+    for(int i = 0; i < n;i++){
+        needed[i] = b[i] - a[i];
+        neededsum += max(0, needed[i]);
+    }
+    dbg(neededsum);
+    if((neededsum * (n - 2)) > (asum - bsum)){
+        cout << "NO"<< endll;
+        return;
+    }
+    dbg(neededsum);
+    int fails = 0;
+    for(int i = 0; i < n; i++){
+        if(needed[i] > -neededsum){
+            fails++;
+            if(fails > 1){
+                cout << "NO" << endll;
+                return;
+            }
         }
     }
-    cout << ans << endll;
+    cout << "YES" << endll;
 }
 
 int32_t main()

@@ -62,24 +62,47 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
-        }
+    int n;
+    cin >> n;
+    if(n % 2 == 1 && n <= 25){
+        cout << -1 << endll;
+        return;
     }
-    cout << ans << endll;
+    if(n % 2 == 0){
+        for(int i = 1; i <= n / 2; i++){
+            cout << i << " " << i << " ";
+        }
+        cout << endll;
+        return;
+    }
+    for(int i = 1; i <= n; i++){
+        if(i == 1 || i == 17 || i == 26){
+            cout << 1 << " ";
+            continue;
+        }
+        if(i == 16 || i == 25){
+            cout << 9 << " ";
+            continue;
+        }
+        if(i == 18 || i == 27){
+            cout << 10 << " ";
+            continue;
+        }
+        if(i > 18 && i < 25){
+            cout << 1 + (i / 2) + (i % 2) << " ";
+            continue;
+        }
+        if(i > 27){
+            cout << i / 2 * 2 << " ";
+            continue;
+        }
+        if(i <= 15){
+            cout << i / 2 + 1 << " ";
+            continue;
+        }
+        cout << 0 << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()

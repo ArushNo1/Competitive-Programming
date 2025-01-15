@@ -62,24 +62,14 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
-        }
+    int l, r;
+    cin >> l >> r;
+    int test = r + 1;
+    if(l >= test / 2.0){
+        cout << "YES" << endll;
+        return;
     }
-    cout << ans << endll;
+    cout << "NO" << endll;
 }
 
 int32_t main()

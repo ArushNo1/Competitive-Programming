@@ -62,24 +62,19 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
-        }
+    int n;
+    cin >> n;
+    map<int, int> nums;
+    for(int i = 0; i < n; i++){
+        int t;
+        cin >> t;
+        nums[t]++;
     }
-    cout << ans << endll;
+    int big = 0;
+    for(auto x : nums){
+        big = max(big, x.second);
+    }
+    cout << n - big << endll;
 }
 
 int32_t main()

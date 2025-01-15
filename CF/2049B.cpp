@@ -62,24 +62,49 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    if(n == 1){
+        cout << "YES" << endll;
+        return;
+    }
+    int pcount = 0;
+    int scount = 0;
+    for(int i= 0; i < n; i++){
+        if(s[i] == 's' && pcount){
+            cout << "NO" << endll;
+            return;
+        }
+        else if(s[i] == 's'){
+            scount++;
+        }
+        if(s[i] == 'p'){
+            pcount++;
         }
     }
-    cout << ans << endll;
+    if(!scount || !pcount){
+        cout << "YES" << endll;
+        return;
+    }
+    bool match1 = (s[0] != 'p');
+    for(int i = 1; i < n && match1; i++){
+        if(s[i] == 's'){
+            match1 = false;
+        }
+    }
+    if(match1){
+        cout << "YES" << endll;
+        return;
+    }
+    for(int i = 0; i < n -1; i++){
+        if(s[i] == 'p'){
+            cout << "NO" << endll;
+            return;
+        }
+    }
+    cout << "YES" << endll;
 }
 
 int32_t main()

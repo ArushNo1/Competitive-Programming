@@ -51,6 +51,30 @@ inline void open(string name){
 	freopen((name + ".out").c_str(), "w", stdout);
 }
 
+// File 1: /t/Math/Binary_Exponentiation.cpp
+
+long long binExp(long long a, long long b) {
+  if (b == 0)
+    return 1;
+
+  long long res = binExp(a, b / 2) % MOD;
+  if (b & 1) {
+    return (a * ((res * res) % MOD)) % MOD;
+  } else
+    return (res * res) % MOD;
+}
+
+long long binExp(long long a, long long b, long long mod) {
+  if (b == 0)
+    return 1;
+
+  long long res = binExp(a, b / 2) % mod;
+  if (b & 1) {
+    return (a * ((res * res) % mod)) % mod;
+  } else
+    return (res * res) % mod;
+}
+
 //comment to enable debugging
 #define dbg(x)
 
@@ -60,26 +84,24 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
+
 void solve(int num_tc)
 {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
-    ll ans = 0;
-    for(ll a = 1; a <= min(x, k); a++){
-        if(k % a != 0) continue;
-        dbg(a);
-        for(ll b = 1; b <= min(y, k / a); b++){
-            dbg(b);
-            if(k / a % b != 0) continue;
-            ll c = k / a / b;
-            if(c > z) continue;
-            dbg(c);
-            ll tmp = (x - a + 1) * (y - b + 1) * (z - c + 1);
-            dbg(tmp);
-            ans = max(ans,tmp);
-        }
-    }
-    cout << ans << endll;
+    ll l, r, k;
+    cin >> l >> r >> k;
+    
+    // ll dig = 9 / k;
+    // ll total = 0;
+    // for(int i = l; i < r; i++){
+    //     total += pow(dig + 1, i);
+    // }
+
+    // cout << total * (dig) << endll;
+
+    ll dig = 9 / k;
+    ll total = binExp(dig + 1, r) - binExp(dig + 1, l);
+    cout << ((total + MOD) % MOD) << endll;
+    
 }
 
 int32_t main()
