@@ -60,50 +60,40 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
-struct pile{
-    ll id;
-    vector<ll> disks;
-    ll top(){
-        ll val = disks.back();
-        disks.pop_back();
-        return val;
-    }
-    void push(ll disk){
-        disks.push_back(disk);
-    }
-};
-
-vector<pair<int, int>> towerofhanoi(ll n, pile from, pile to, pile spare){
-    vector<pair<int, int>> moves;
-    if(n == 1){
-        return {{from.id, to.id}};
-    }
-    else{
-        vector<ii> result = towerofhanoi(n - 1, from, spare, to);
-        moves.insert(moves.end(), all(result));
-        moves.push_back({from.id, to.id});
-        result = towerofhanoi(n - 1, spare, to, from);
-        moves.insert(moves.end(), all(result));
-    }
-    return moves;
-}
-
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    pile a, b, c;
-    a.id = 1;
-    b.id = 3;
-    c.id = 2;
-    for(int i = n; i > 0; i--){
-        a.push(i);
+    ll n, k;
+    cin >> n >> k;
+    vector<pair<vll, ll>> screenshots(n, {vll(k), 0ll});
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < k; j++){
+            cin >> screenshots[i].first[j];
+        }
+        screenshots[i].second = i;
     }
-    vector<pair<int, int>> moves = towerofhanoi(n, a, b, c);
-    cout << moves.size() << endl;
-    for(auto move : moves){
-        cout << move.first << " " << move.second << endll;
+
+    for(int j = k - 1; j >= 0; j--){
+        sort(all(screenshots), [&](pair<vll, ll> a, pair<vll, ll> b){
+            return a.first[j] < b.first[j];
+        });
     }
+
+    for(int j = 0; j < k; j++){
+        ll val = -900;
+        for(int i = 0; i < n; i++){
+            if(screenshots[i].first[j] < val){
+                cout << "NO" << endll;
+                return;
+            }
+            val = screenshots[i].first[j];
+        }
+    }
+
+    cout << "YES" << endll;
+    for(int i = 0; i < n; i++){
+        cout << screenshots[i].second + 1 << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()

@@ -60,50 +60,25 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
-struct pile{
-    ll id;
-    vector<ll> disks;
-    ll top(){
-        ll val = disks.back();
-        disks.pop_back();
-        return val;
-    }
-    void push(ll disk){
-        disks.push_back(disk);
-    }
-};
-
-vector<pair<int, int>> towerofhanoi(ll n, pile from, pile to, pile spare){
-    vector<pair<int, int>> moves;
-    if(n == 1){
-        return {{from.id, to.id}};
-    }
-    else{
-        vector<ii> result = towerofhanoi(n - 1, from, spare, to);
-        moves.insert(moves.end(), all(result));
-        moves.push_back({from.id, to.id});
-        result = towerofhanoi(n - 1, spare, to, from);
-        moves.insert(moves.end(), all(result));
-    }
-    return moves;
-}
+typedef vector<ii> vii;
 
 void solve(int num_tc)
 {
     int n;
     cin >> n;
-    pile a, b, c;
-    a.id = 1;
-    b.id = 3;
-    c.id = 2;
-    for(int i = n; i > 0; i--){
-        a.push(i);
+    vii nums(n);
+    for(int i= 0; i < n; i++){
+        cin >> nums[i].first;
+        nums[i].second = i;
     }
-    vector<pair<int, int>> moves = towerofhanoi(n, a, b, c);
-    cout << moves.size() << endl;
-    for(auto move : moves){
-        cout << move.first << " " << move.second << endll;
+    sort(all(nums));
+    int subs = 0;
+    for(int i = 1 ;i < n ;i++){
+        if(nums[i].second < nums[i - 1].second){
+            subs++;
+        }
     }
+    cout << subs + 1 << endll;
 }
 
 int32_t main()

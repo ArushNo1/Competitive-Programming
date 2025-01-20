@@ -60,50 +60,28 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
-struct pile{
-    ll id;
-    vector<ll> disks;
-    ll top(){
-        ll val = disks.back();
-        disks.pop_back();
-        return val;
-    }
-    void push(ll disk){
-        disks.push_back(disk);
-    }
-};
 
-vector<pair<int, int>> towerofhanoi(ll n, pile from, pile to, pile spare){
-    vector<pair<int, int>> moves;
-    if(n == 1){
-        return {{from.id, to.id}};
-    }
-    else{
-        vector<ii> result = towerofhanoi(n - 1, from, spare, to);
-        moves.insert(moves.end(), all(result));
-        moves.push_back({from.id, to.id});
-        result = towerofhanoi(n - 1, spare, to, from);
-        moves.insert(moves.end(), all(result));
-    }
-    return moves;
-}
-
+#define maxeq(a, b) a = max<decltype(a)>(a, b)
+#define mineq(a, b) a = min<decltype(a)>(a, b)
 void solve(int num_tc)
 {
     int n;
     cin >> n;
-    pile a, b, c;
-    a.id = 1;
-    b.id = 3;
-    c.id = 2;
-    for(int i = n; i > 0; i--){
-        a.push(i);
+    vi songs(n);
+    fillv(songs, n);
+
+    set<int> playlist;
+    int l = 0;
+    ll longest = 1;
+    for(int r = 0; r < n; r++){
+        while(playlist.find(songs[r]) != playlist.end()){
+            playlist.erase(songs[l]);
+            l++;
+        }
+        playlist.insert(songs[r]);
+        maxeq(longest, playlist.size());
     }
-    vector<pair<int, int>> moves = towerofhanoi(n, a, b, c);
-    cout << moves.size() << endl;
-    for(auto move : moves){
-        cout << move.first << " " << move.second << endll;
-    }
+    cout << longest << endll;
 }
 
 int32_t main()

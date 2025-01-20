@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class acsl{
+public class Round1{
     //mapping between every ring sequence and score
     public static final TreeMap<String, Integer> ringScores = new TreeMap<>();
     static{

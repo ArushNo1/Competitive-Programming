@@ -52,7 +52,7 @@ inline void open(string name){
 }
 
 //comment to enable debugging
-#define dbg(x)
+//!#define dbg(x)
 
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
@@ -60,50 +60,49 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
-struct pile{
-    ll id;
-    vector<ll> disks;
-    ll top(){
-        ll val = disks.back();
-        disks.pop_back();
-        return val;
-    }
-    void push(ll disk){
-        disks.push_back(disk);
-    }
-};
-
-vector<pair<int, int>> towerofhanoi(ll n, pile from, pile to, pile spare){
-    vector<pair<int, int>> moves;
-    if(n == 1){
-        return {{from.id, to.id}};
-    }
-    else{
-        vector<ii> result = towerofhanoi(n - 1, from, spare, to);
-        moves.insert(moves.end(), all(result));
-        moves.push_back({from.id, to.id});
-        result = towerofhanoi(n - 1, spare, to, from);
-        moves.insert(moves.end(), all(result));
-    }
-    return moves;
-}
-
 void solve(int num_tc)
 {
     int n;
     cin >> n;
-    pile a, b, c;
-    a.id = 1;
-    b.id = 3;
-    c.id = 2;
-    for(int i = n; i > 0; i--){
-        a.push(i);
+    vi c(n);
+    for(int i = 0; i < n; i++){
+        cin >> c[i];
+        c[i]--;
     }
-    vector<pair<int, int>> moves = towerofhanoi(n, a, b, c);
-    cout << moves.size() << endl;
+
+    vector<array<int, 3>> moves;
+
+    for(int i = 0; i < n; i++){
+        dbg(i);
+        dbg(c);
+        if(c[i] == i){
+            continue;
+        }
+        while(c[i] != i){
+            int otherside = c[c[i]];
+            dbg(otherside);
+            if(otherside == -1){
+                moves.push_back({2, i, otherside});
+                swap(c[i], c[c[i]]);
+                break;
+            }
+            else if(otherside == c[i]){
+                moves.push_back({2, i, c[i]});
+                c[i] = -1;
+                break;
+            } else{
+                moves.push_back({1, i, c[i]});
+                swap(c[i], c[c[i]]);
+            }
+            dbg(c);
+        }
+    }
+    cout << moves.size() << endll;
     for(auto move : moves){
-        cout << move.first << " " << move.second << endll;
+        cout << move[0] << " " << move[1] + 1 << " " << move[2] + 1 << endll;
     }
+
+
 }
 
 int32_t main()
@@ -117,3 +116,32 @@ int32_t main()
         solve(t+1);
     }
 }
+/*
+
+int n;
+    cin >> n;
+    vi c(n);
+    vi ind(n);
+
+    for(int i = 0; i < n; i++){
+        cin >> c[i];
+        c[i]--;
+        ind[c[i]] = i;
+    }
+
+    vi dc = c;
+    sort(all(dc));
+
+    vector<ii> moves;
+    for(int i = 0; i < n; i++){
+        if(dc[i] != c[i]){
+            moves.push_back({i + 1, ind[dc[i]] + 1});
+            swap(c[i], c[ind[dc[i]]]);
+            swap(ind[c[i]], ind[c[ind[dc[i]]]]);
+        }
+    }
+    cout << moves.size() << endll;
+    for(ii p : moves){
+        cout << "1 " << p.first << " " << p.second << endll;
+    }
+*/
