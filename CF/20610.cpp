@@ -65,23 +65,53 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
+    int n;
+    cin >> n;
+    vi even;
+    vi odd;
+    for(int i = 0; i < n; i++){
+        int x;
+        cin >> x;
+        if(x % 2 == 0){
+            even.push_back(x);
+        }
+        else{
+            odd.push_back(x);
+        }
+    }
+    int s = 0;
+    sort(all(even), greater<int>());
+    sort(all(odd), greater<int>());
+    vi nums;
+    for(int i = 0; i < n; i++){
+        if(even.size() == 0){
+            nums.insert(nums.end(), all(odd));
             break;
         }
-        if((l & (1 << i)) == 0){
-            continue;
+        if(odd.size() == 0){
+            nums.insert(nums.end(), all(even));
+            break;
         }
-        mask += (1 << i);
+        if(i % 2 == 0){
+            nums.push_back(even.back());
+            even.pop_back();
+        }
+        else{
+            nums.push_back(odd.back());
+            odd.pop_back();
+        }
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    int count = 0;
+    for(int i = 0; i < n; i++){
+        s += nums[i];
+        if(s % 2 == 0){
+            count++;
+            while(s % 2 == 0){
+                s /= 2;
+            }
+        }
+    }
+    cout << count << endll;
 }
 
 int32_t main()

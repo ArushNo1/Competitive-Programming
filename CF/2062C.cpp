@@ -63,25 +63,35 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
+vll diff(vll& a){
+    vll res;
+    for(int i = 1; i < a.size(); i++){
+        res.push_back(a[i] - a[i - 1]);
+    }
+    return res;
+}
+
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
+    int n;
+    cin >> n;
+    vll a(n);
+    ll sum = 0;
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+        sum += a[i];
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    ll ans = sum;
+    if(n == 1){
+        cout << ans << endll;
+        return;
+    }
+    ans = max(ans, abs(a[0] - a.back()));
+    while(a.size() > 1){
+        a = diff(a);
+        ans = max(ans, abs(a[0] - a.back()));
+    }
+    cout << ans << endll;
 }
 
 int32_t main()

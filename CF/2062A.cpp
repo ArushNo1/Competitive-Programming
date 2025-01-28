@@ -65,23 +65,9 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
-    }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    string s;
+    cin >> s;
+    cout << count(all(s), '1') << endll;
 }
 
 int32_t main()

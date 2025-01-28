@@ -63,25 +63,42 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
+vvi adj;
+
+ld dfs(int u, int p = -1, int d = 0){
+    if(adj[u].size() == 1 && p != -1){
+        return d;
+    }
+    ld sumd = 0;
+    ld num_children = adj[u].size() - (p != -1);
+    for(int v : adj[u]){
+        if(v == p) continue;
+        sumd += dfs(v, u, d+1);
+    }
+    return sumd / num_children;
+}
+
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
+    int n;
+    cin >> n;
+    if(n == 1){
+        cout << 0 << endll;
+        return;
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    adj.resize(n);
+
+    for(int i = 0; i < n - 1; i++){
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+
+    ld ans = dfs(0);
+    cout << fixed << setprecision(10) << ans << endll;
 }
 
 int32_t main()
@@ -90,7 +107,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

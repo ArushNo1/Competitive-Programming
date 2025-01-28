@@ -65,23 +65,36 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
+    vi primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47};
+    vi divisors;
+    for(int i : primes){
+        cout << i << endl;
+        string s;
+        cin >> s;
+        if(s == "yes"){
+            divisors.push_back(i);
         }
-        if((l & (1 << i)) == 0){
-            continue;
+        if(divisors.size() > 1){
+            cout << "composite" << endl;
+            return;
         }
-        mask += (1 << i);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    if(divisors.size() == 0){
+        cout << "prime" << endl;
+        return;
+    }
+    if(divisors[0] > 10){
+        cout << "prime" << endl;
+        return;
+    }
+    cout << divisors[0] * divisors[0] << endl;
+    string s;
+    cin >> s;
+    if(s == "yes"){
+        cout << "composite" << endl;
+        return;
+    }
+    cout << "prime" << endl;
 }
 
 int32_t main()
@@ -90,7 +103,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

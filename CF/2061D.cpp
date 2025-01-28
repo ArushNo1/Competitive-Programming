@@ -57,6 +57,11 @@ inline void open(string name){
 //comment to enable debugging
 #define dbg(x)
 
+ostream& operator<<(ostream& os, const multiset<int>::iterator& o){
+    return os << *o; 
+}
+
+
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
 //edit for specific DS
@@ -65,24 +70,55 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
+    int n, m;
+    cin >> n >> m;
+    if (n < m) {
+        cout << "NO" << endl;
+        return;
+    }
+    multiset<int> a;
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        int t;
+        cin >> t;
+        a.insert(t);
+        sum += t;
+    }
+    multiset<int> b;
+    for (int i = 0; i < m; i++) {
+        int t;
+        cin >> t;
+        b.insert(t);
+        sum -= t;
+    }
+    if (sum != 0) {
+        cout << "NO" << endl;
+        return;
+    }
+
+    auto it = b.end();
+    while (it != b.begin() && !a.empty()) {
+        it--;
+        if (*a.rbegin() == *it) {
+            a.erase(--a.end());
+            it = b.erase(it);
             continue;
         }
-        mask += (1 << i);
+        if (*a.rbegin() > *it) {
+            cout << "NO" << endl;
+            return;
+        }
+        b.insert(*it / 2);
+        b.insert(*it / 2 + *it % 2);
+        it = b.erase(it);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    if (a.empty()) {
+        cout << "YES" << endl;
+        return;
+    }
+    cout << "NO" << endl;
 }
+
 
 int32_t main()
 {

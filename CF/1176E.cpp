@@ -65,23 +65,42 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
+    int n, m;
+    cin >> n >> m;
+    vvi adj(n);
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    vb visited(n);
+    stack<pair<int, int>> q;
+    q.push({0, 0});
+    visited[0] = true;
+    vi even;
+    vi odd;
+    while(!q.empty()){
+        auto [u, d] = q.top();
+        q.pop();
+        if(d % 2 == 0){ even.push_back(u);}
+        else{ odd.push_back(u); }
+        for(int v : adj[u]){
+            if(!visited[v]){
+                visited[v] = true;
+                q.push({v, d + 1});
+            }
+        }
+    }
+    if(even.size() > odd.size()){
+        swap(even, odd);
+    }
+    cout << even.size() << endll;
+    for(int node : even){
+        cout << node + 1 << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()

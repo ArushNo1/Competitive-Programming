@@ -63,25 +63,49 @@ inline void open(string name){
 #include <alldebug.h>
 #endif
 
+template<typename T>
+T last_true(T lo, T hi, std::function<bool(T)> f) {
+    lo--;
+    while (lo < hi) {
+        T mid = lo + (hi - lo + 1) / 2;
+        if (f(mid)) {
+            lo = mid;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return lo;
+}
+
+
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
+    int n, m;
+    cin >> n >> m;
+    vector<pll> intervals(m);
+    fillv(intervals, m);
+
+    sort(all(intervals));
+
+    cout << last_true<ll>(1, intervals.back().second, [&](ll x) {
+        ll placed = 0;
+        ll lastpos = -x;
+        for(pll p : intervals){
+            p.first = max(p.first, lastpos+x);
+            if(p.first > p.second){
+                continue;
+            }
+            ll size = p.second - p.first + 1;
+            ll nump = (size + x - 1) / x;
+            lastpos = p.first + (nump - 1) * x;
+            placed += nump;
+            if(placed >= n){
+                dbg("true");
+                return true;
+            }
         }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
-    }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+        return placed >= n;
+    }) << endll;
 }
 
 int32_t main()
@@ -89,8 +113,10 @@ int32_t main()
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);  
 
+    open("socdist");
+
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

@@ -65,23 +65,39 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
+    vi shirts(5);
+    fillv(shirts, 5);
+    int k;
+    cin >> k;
+
+    map<string, int> counts = {
+        {"S", shirts[0]},
+        {"M", shirts[1]},
+        {"L", shirts[2]},
+        {"XL", shirts[3]},
+        {"XXL", shirts[4]}
+    };
+
+    map<string, vector<string>> board = {
+        {"S", {"S", "M", "L", "XL", "XXL"}},
+        {"M", {"M", "L", "S", "XL", "XXL"}},
+        {"L", {"L", "XL", "M", "XXL", "S"}},
+        {"XL", {"XL", "XXL", "L", "M", "S"}},
+        {"XXL", {"XXL", "XL", "L", "M", "S"}}
+    };
+
+    for(int i = 0; i < k; i++){
+        string shirt;
+        cin >> shirt;
+        for(string o : board[shirt]){
+            if(counts[o] > 0){
+                counts[o]--;
+                cout << o << endll;
+                break;
+            }
         }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    cout << endll;
 }
 
 int32_t main()
@@ -90,7 +106,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

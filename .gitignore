@@ -41,3 +41,4 @@ main*
 t/
 *.txt
 Contests/ACL-IT-25
+.clang-format

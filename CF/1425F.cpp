@@ -65,23 +65,32 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
+    int n;
+    cin >> n;
+    int abc;
+    cout << "? 1 3" << endl;
+    cin >> abc;
+    int bc;
+    cout << "? 2 3" << endl;
+    cin >> bc;
+    vi ans(n);
+    ans[0] = abc - bc;
+    int ab;
+    cout << "? 1 2" << endl;
+    cin >> ab;
+    ans[1] = ab - ans[0];
+    ans[2] = abc - ans[0] - ans[1];
+    for(int i = 3; i < n; i++){
+        cout << "? " << i << " " << i + 1 << endl;
+        int x;
+        cin >> x;
+        ans[i] = x - ans[i - 1];
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    cout << "! ";
+    for(int x : ans){
+        cout << x << " ";
+    }
+    cout << endl;
 }
 
 int32_t main()
@@ -90,7 +99,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

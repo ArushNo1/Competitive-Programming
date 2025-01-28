@@ -65,23 +65,30 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
+    ll n, l, r;
+    cin >> n >> l >> r;
+    l--;
+    r--;
+    vll before, after;
+    for(int i = 0; i < n; i++){
+        ll t;
+        cin >> t;
+        if(i <= r){
+            before.push_back(t);
         }
-        if((l & (1 << i)) == 0){
-            continue;
+        if(i >= l){
+            after.push_back(t);
         }
-        mask += (1 << i);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    sort(all(before));
+    sort(all(after));
+    dbg(before);
+    dbg(after);
+    int size = r - l + 1;
+    dbg(size);
+    ll ans1 = accumulate(before.begin(), before.begin() + size, 0ll);
+    ll ans2 = accumulate(after.begin(), after.begin() + size, 0ll);
+    cout << min(ans1, ans2) << endll;
 }
 
 int32_t main()

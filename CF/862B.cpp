@@ -65,23 +65,37 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
-        }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
+    int n;
+    cin >> n;
+    vvi adj(n);
+    for(int i = 0; i < n - 1; i++){
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+
+    vi color(n, 0);
+    stack<int> q;
+    q.push(0);
+    color[0] = 1;
+    while(!q.empty()){
+        int u = q.top();
+        q.pop();
+        for(int v : adj[u]){
+            if(!color[v]){
+                color[v] = 3 - color[u];
+                q.push(v);
+            }
+        }
+    }
+    ll c1 = 0, c2 = 0;
+    for(int i = 0; i < n; i++){
+        if(color[i] == 1) c1++;
+        if(color[i] == 2) c2++;
+    }
+    cout << c1 * c2 - n + 1 << endll;
 }
 
 int32_t main()
@@ -90,7 +104,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

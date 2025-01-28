@@ -65,23 +65,39 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
+    int n;
+    cin >> n;
+    vi sticks(n);
+    fillv(sticks, n);
+    sort(all(sticks), greater<int>());
+
+    ll base = 0;
+    ll basei = 0;
+
+    for(int i = 0; i < n - 1; i++){
+        if(sticks[i] == sticks[i + 1]){
+            base = sticks[i];
+            basei = i;
             break;
         }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+
+    sticks.erase(sticks.begin() + basei);
+    sticks.erase(sticks.begin() + basei);
+
+    dbg(sticks);
+    dbg(base);
+
+
+    for(int i = 0; i < n - 3; i++){
+        dbg(sticks[i]);
+        dbg(sticks[i + 1]);
+        if((sticks[i + 1] + 2 * base) > sticks[i]){
+            cout << base << " " << base << " " << sticks[i] << " " << sticks[i + 1] << endll;
+            return;
+        }
+    }
+    cout << -1 << endll;
 }
 
 int32_t main()

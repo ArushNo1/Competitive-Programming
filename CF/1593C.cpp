@@ -65,23 +65,22 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int l, r;
-    cin >> l >> r;
-    ll mask = 0;
-    for(int i = 30; i >= 0; i--){
-        if((l & (1 << i)) ^ (r & (1 << i))){
-            mask += (1 << i);
-            break;
+    int h, n;
+    cin >> h >> n;
+    vi a(n);
+    fillv(a, n);
+    sort(all(a), greater<int>());
+    dbg(a);
+    int cpos = 0;
+    for(int i = 0; i < n;i++){
+        if(cpos >= a[i]){
+            cout << i << endll;
+            return;
         }
-        if((l & (1 << i)) == 0){
-            continue;
-        }
-        mask += (1 << i);
+        cpos += h - a[i];
+        dbg(cpos);
     }
-    dbg(bitset<6>(l).to_string());
-    dbg(bitset<6>(r).to_string());
-    dbg(bitset<6>(mask).to_string());
-    cout << mask << " " << (mask - 1) << " " << (mask == r ? l : r) << endll;
+    cout << n << endll;
 }
 
 int32_t main()
