@@ -96,6 +96,7 @@
     "C_Cpp.errorSquiggles": "enabled",
     "C_Cpp.default.compilerPath": "/mnt/c/Program Files/MSYS2/ucrt64/bin/gcc.exe",
     "java.debug.settings.onBuildFailureProceed": true,
-    "cph.general.defaultLanguage": "java",
-    "cph.general.defaultLanguageTemplateFileLocation": "/home/arush/training/cp-templates/.JAVA/CLASS_NAME.java",
+    "editor.snippetSuggestions": "none",
+    "cph.general.autoShowJudge": false,
+    "cph.general.useShortCodeForcesName": true,
 }
