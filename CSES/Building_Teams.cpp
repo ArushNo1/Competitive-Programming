@@ -48,25 +48,58 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+vvi adj;
+vi color;
+bool fail = false;
+
+void dfs(int node, int col){
+    if(color[node] != 0){
+        if(color[node] != col){
+            fail = true;
+        }
+        return;
+    }
+    color[node] = col;
+    for(int nb : adj[node]){
+        dfs(nb, 3-col);
+        if(fail) return;
+    }
+}
+
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
+    int n, m;
+    cin >> n >> m;
+    adj.resize(n);
+    color.resize(n);
+    for (int i= 0; i < m; i++){
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
     for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+        if(color[i] == 0){
+            dfs(i, 1);
+            if(fail){
+                break;
+            }
+        }
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
+    if(fail){
+        cout << "IMPOSSIBLE" << endll;
+        return;
     }
-    cout << count << endll;
+    else{
+        for(int i= 0; i < n; i++){
+            cout << color[i] << " ";
+        }
+    }
+    cout << endll;
 }
 
 int32_t main()
@@ -75,7 +108,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

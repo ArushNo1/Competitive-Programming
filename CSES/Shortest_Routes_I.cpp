@@ -50,23 +50,45 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
+    int n, m;
+    cin >> n >> m;
+    vll dist(n, inf);
+    vector<vector<pll>> adj(n);
+    for(int i= 0; i < m; i++){
+        ll a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        ll c;
+        cin >> c;
+        adj[a].push_back({b, c});
+        adj[b].push_back({b, c});
+    }
+    priority_queue<pll, vector<pll>, greater<pll>> bfs;
+    //vector<bool> visited(n, false);
+    bfs.push({0, 0});
+    //dist[0] = 0;
+    while(!bfs.empty()){
+        pll u = bfs.top();
+        dbg(u);
+        bfs.pop();
+        if(dist[u.second] != inf) {
+            dbg("viisted");
+            continue;
+        }
+        dist[u.second] = u.first;
+        for(auto [v, weight] : adj[u.second]){
+            dbg(v);
+            dbg(weight);
+            if(dist[v] == inf){
+                bfs.push({u.first + weight, v});
+            }
+        }
+    }
     for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+        cout << dist[i] << " ";
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
-    }
-    cout << count << endll;
+    cout << endll;
 }
 
 int32_t main()
@@ -75,7 +97,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

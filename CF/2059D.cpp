@@ -50,23 +50,58 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
+    int n, s1, s2;
+    cin >> n >> s1 >> s2;
+    s1--; s2--;
+    //FFFGGG
+    int m1;
+    cin >> m1;
+    vvi adj1(n);
+    for(int i = 0; i < m1; i++){
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj1[u].push_back(v);
+        adj1[v].push_back(u);
+    }
+    int m2;
+    cin >> m2;
+    vvi adj2(n);
+    for(int i = 0; i < m2; i++){
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj2[u].push_back(v);
+        adj2[v].push_back(u);
+    }
+
+    vector<vector<bool>> vis(n, vector<bool>(n));
+    vector<vector<int>> dist(n, vector<int>(n, 1e9));
+    //vis[f][g]
+    priority_queue<ii, vector<ii>, greater<ii>> dij;
     for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+        dij.push({i, i});
+        dist[i][i] = 0;
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
+
+    while(!dij.empty()){
+        int u = dij.top().first;
+        int v = dij.top().second;
+        dij.pop();
+        if(vis[u][v]) continue;
+        vis[u][v] = true;
+        if(u == s1 && v == s2){
+            break;
+        }
+        for(int nb1 : adj1[u]){
+            for(int nb2 : adj2[v]){
+                if(vis[nb1][nb2]) continue;
+                dist[nb1][nb2] = min(dist[nb1][nb2], dist[u][v] + abs(nb1 - nb2));
+                dij.push({nb1, nb2});
+            }
+        }
     }
-    cout << count << endll;
+    cout << (dist[s1][s2] == 1e9 ? -1 : dist[s1][s2]) << endll;
 }
 
 int32_t main()

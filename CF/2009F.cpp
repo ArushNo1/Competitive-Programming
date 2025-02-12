@@ -48,26 +48,47 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+//sum of the i'th shift of the array from l to
+ll sumcyc(ll l, ll r, ll i, vll& pref) {
+    ll n = pref.size() - 1;
+    ll newl = (l + i) % n;
+    ll newr = (r + i) % n;
+    
+    if (newr >= newl) {
+        return pref[newr + 1] - pref[newl];
+    } else {
+        return (pref[n] - pref[newl]) + pref[newr + 1];
+    }
+}
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
+    ll n, q;
+    cin >> n >> q;
+    vll arr(n);
+    vll pref(n + 1);
+    ll sum = 0;
     for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+        cin >> arr[i];
+        sum += arr[i];
+        pref[i + 1] = pref[i] + arr[i];
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
+    for(int i = 0; i < q; i++){
+        ll l, r;
+        cin >> l >> r;
+        l--;
+        ll leftblocks = l / n;
+        ll rightblocks = (r) / n;
+        l %= n;
+        r %= n;
+        ll ans = (rightblocks - leftblocks) * sum;
+        if(l > 0) ans -= sumcyc(0, l - 1, leftblocks, pref);
+        if(r > 0) ans += sumcyc(0, r - 1, rightblocks, pref);
+        cout << ans << endll;
     }
-    cout << count << endll;
 }
+//  l    r
+//48324 83244 32448 24483 44832
 
 int32_t main()
 {

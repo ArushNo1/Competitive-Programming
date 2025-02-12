@@ -52,21 +52,30 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
+    vi color(n);
+    fillv(color, n);
+    vvi adj(n);
+    for(int i= 0 ; i < n - 1; i++){
+        int a, b;
+        cin >> a >> b;
+        a--; b--;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    string result(n, '0');
     for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+        map<int, int> cnt;
+        cnt[color[i]]++;
+        for(auto& nei : adj[i]){
+            cnt[color[nei]]++;
+        }
+        for(auto &[c, v] : cnt){
+            if(v > 1){
+                result[c - 1]  = '1';
+            }
+        }
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
-    }
-    cout << count << endll;
+    cout << result << endll;
 }
 
 int32_t main()

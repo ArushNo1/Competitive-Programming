@@ -66,7 +66,7 @@ inline void open(string name){
 vi perm;
 vi depth;
 vi dist;
-vi cc;
+vi reqseen;
 
 void disttocycle(int node, int d){
     dbg(node);
@@ -74,18 +74,18 @@ void disttocycle(int node, int d){
     if(depth[node] != -1){
         dbg(depth[node]);
         dbg("visited");
-        dbg(cc);
+        dbg(reqseen);
         for(int i = depth[node]; i < d; i++){
-            dist[cc[i]] = 0;
+            dist[reqseen[i]] = 0;
         }
         for(int i = 0; i < depth[node]; i++){
-            dist[cc[i]] = depth[node] - depth[cc[i]];
-            dbg(cc[i]);
-            dbg(dist[cc[i]]);
+            dist[reqseen[i]] = depth[node] - depth[reqseen[i]];
+            dbg(reqseen[i]);
+            dbg(dist[reqseen[i]]);
         }
         return;
     }
-    cc.push_back(node);
+    reqseen.push_back(node);
     depth[node] = d;
     int next = perm[node];
     if(dist[next] != -1){
@@ -94,10 +94,10 @@ void disttocycle(int node, int d){
         dbg(dist[next]);
         dist[node] = dist[next] + 1;
         dbg(dist[node]);
-        for(int i = cc.size() - 2; i >= 0; i--){
-            dist[cc[i]] = dist[cc[i+1]] + 1;
-            dbg(cc[i]);
-            dbg(dist[cc[i]]);
+        for(int i = reqseen.size() - 2; i >= 0; i--){
+            dist[reqseen[i]] = dist[reqseen[i+1]] + 1;
+            dbg(reqseen[i]);
+            dbg(dist[reqseen[i]]);
         }
         return;
     }
@@ -120,7 +120,7 @@ void solve(int num_tc)
     for(int i = 0; i < n; i++){
         if(depth[i] == -1){
             disttocycle(i, 0);
-            cc.clear();
+            reqseen.clear();
         }
     }
     dbg(dist);

@@ -50,24 +50,29 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
-    for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+    int x, y;
+    cin >> x >> y;
+    int diff = y - x;
+    if(diff > 1){
+        cout << "No" << endll;
+        return;
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
+    if(diff == 1){
+        cout << "Yes" << endll;
+        return;
     }
-    cout << count << endll;
+    if(diff == 0){
+        cout << "No" << endll;
+        return;
+    }
+    diff = -diff;
+    if(diff % 9 == 8){
+        cout << "Yes" << endll;
+        return;
+    }
+    cout << "No" << endll;
 }
+
 
 int32_t main()
 {

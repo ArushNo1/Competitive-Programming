@@ -48,25 +48,50 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+int n;
+void floyd_warshall(vector<vector<ll>> &distance)
+{
+	for (int k = 0; k < n; k++) {
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				distance[i][j] = min(distance[i][j],
+									distance[i][k]+distance[k][j]);
+			}
+		}
+	}
+}
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<vi> grid(n, vi(n));
-    vector<int> lastones;
+    int m, q;
+    cin >> n >> m >> q;
+    vector<vll> distance(n, vll(n, ll(1e17)));
+    for(int i = 0; i < m; i++){
+        ll a, b, c;
+        cin >> a >> b;
+        a--;
+        b--;
+        cin >> c;
+        distance[a][b] = min(distance[a][b], c);
+        distance[b][a] = min(distance[b][a], c);
+    }
     for(int i = 0; i < n; i++){
-        fillv(grid[i], n);
-        int j = n - 1;
-        while(j >= 0 && grid[i][j] == 1) j--;
-        lastones.push_back(n - j - 1);
+        distance[i][i] = 0;
     }
-    dbg(lastones);
-    sort(all(lastones));
-    int count = 0;
-    for(int i = 0; i < lastones.size(); i++){
-        if(lastones[i] >= count) count++;
+    floyd_warshall(distance);
+    dbg(distance);
+    for(int i = 0; i < q; i++){
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        ll res = distance[a][b];
+        if(res == ll(1e17)){
+            cout << -1 << endll;
+            continue;
+        }
+        cout << res << endll;
     }
-    cout << count << endll;
 }
 
 int32_t main()
@@ -75,7 +100,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
