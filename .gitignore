@@ -38,6 +38,6 @@ main*
 
 
 /bin
-cp-templates/
+cp-templates
 Contests/ACL-IT-25
 .clang-format
