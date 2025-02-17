@@ -45,32 +45,42 @@ inline void open(string name){
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
 //edit for specific DS
-#include "cp-templates/Debugging/arraydbg.h"
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<array<int, 3>> opts(n);
-    //[i][j] means including the ith day, jth option for that day
-    vector<array<int, 3>> dp(n + 1, {0, 0, 0});
-    for(int i = 0; i < n ;i++){
-        for(int j = 0; j < 3; j++){
-            cin >> opts[i][j];
-        }
-    }
-    for(int i = 0; i < n ;i++){
-        for(int j= 0; j < 3; j++){
-            for(int k = 0; k < 3; k++){
-                if(k == j) continue;
-                dp[i+1][k] = max(dp[i+1][k], dp[i][j] + opts[i][k]);
+    string s, t;
+    cin >> s >> t;
+    int n = s.size(), m = t.size();
+    vvi dp(n + 1, vi(m + 1, 0));
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(s[i] == t[j]){
+                dp[i + 1][j + 1] = 1 + dp[i][j];
+            }
+            else{
+                dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1]);
             }
         }
     }
-    dbg(dp);
-    cout << max({dp[n][0], dp[n][1], dp[n][2]}) << endll;
+    int r = n, c = m;
+    string ans = "";
+    while(r > 0 && c > 0){
+        if(s[r - 1] == t[c - 1]){
+            ans.push_back(s[r - 1]);
+            r--;
+            c--;
+        }
+        else if(dp[r - 1][c] > dp[r][c - 1]){
+            r--;
+        }
+        else{
+            c--;
+        }
+    }
+    reverse(all(ans));
+    cout << ans << endll;
 }
 
 int32_t main()
@@ -80,7 +90,6 @@ int32_t main()
     dbg("turn off debugging");
     ll T = 1;
     //cin >> T;
-
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

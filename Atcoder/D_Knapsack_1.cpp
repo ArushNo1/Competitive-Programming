@@ -45,32 +45,27 @@ inline void open(string name){
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
 //edit for specific DS
-#include "cp-templates/Debugging/arraydbg.h"
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<array<int, 3>> opts(n);
-    //[i][j] means including the ith day, jth option for that day
-    vector<array<int, 3>> dp(n + 1, {0, 0, 0});
-    for(int i = 0; i < n ;i++){
-        for(int j = 0; j < 3; j++){
-            cin >> opts[i][j];
-        }
+    int n, w;
+    cin >> n >> w;
+    vll vals(n), weights(n);
+    for(int i = 0; i < n; i++){
+        cin >> weights[i] >> vals[i];
     }
-    for(int i = 0; i < n ;i++){
-        for(int j= 0; j < 3; j++){
-            for(int k = 0; k < 3; k++){
-                if(k == j) continue;
-                dp[i+1][k] = max(dp[i+1][k], dp[i][j] + opts[i][k]);
-            }
+    vll dp(w + 1, 0);
+    for(int i = 0; i < n; i++){
+        dbg(i);
+        dbg(weights[i]);
+        for(int j = w; j >= weights[i]; j--){
+            dp[j] = max(dp[j], dp[j - weights[i]] + vals[i]);
         }
     }
     dbg(dp);
-    cout << max({dp[n][0], dp[n][1], dp[n][2]}) << endll;
+    cout << dp[w] << endll;
 }
 
 int32_t main()
@@ -80,7 +75,6 @@ int32_t main()
     dbg("turn off debugging");
     ll T = 1;
     //cin >> T;
-
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

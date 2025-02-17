@@ -45,32 +45,72 @@ inline void open(string name){
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
 //edit for specific DS
-#include "cp-templates/Debugging/arraydbg.h"
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+template<typename T>
+std::pair<T, int> floyd_find_cycle(T start, function<T(T)> f) {
+    T tort = start;
+    T hare = start;
+    while(tort != hare){
+        tort = f(tort);
+        hare = f(f(hare));
+    }
+    hare = start;
+    while(tort != hare){
+        tort = f(tort);
+        hare = f(hare);
+    }
+    T mu = tort;
+    hare = f(tort);
+    int lambda = 1;
+    while(tort != hare){
+        hare = f(hare);
+        lambda++;
+    }
+    return {mu, lambda};
+}
+
+void process(string& s, vi& color){
+    if(s == "stop"){
+        exit(0);
+    }
+    int c = 0;
+    for(int i = 0; i < s.size(); i++){
+        if(s[i] == ' '){
+            c++;
+        }
+        else{
+            color[s[i] - '0'] = c;
+        }
+    }
+}
+
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    vector<array<int, 3>> opts(n);
-    //[i][j] means including the ith day, jth option for that day
-    vector<array<int, 3>> dp(n + 1, {0, 0, 0});
-    for(int i = 0; i < n ;i++){
-        for(int j = 0; j < 3; j++){
-            cin >> opts[i][j];
-        }
+
+    vi color(10);
+    //1 stays behind
+    cout << "next 0 2 3 4 5 6 7 8 9" << endl;
+    string s;
+    getline(cin, s);
+    cout << "next 0" << endl;
+    getline(cin, s);
+    process(s, color);
+    while(color[0] != color[2]){
+        cout << "next 0 2 3 4 5 6 7 8 9" << endl;
+        getline(cin, s);
+        cout << "next 0" << endl;
+        getline(cin, s);
+        process(s, color);
     }
-    for(int i = 0; i < n ;i++){
-        for(int j= 0; j < 3; j++){
-            for(int k = 0; k < 3; k++){
-                if(k == j) continue;
-                dp[i+1][k] = max(dp[i+1][k], dp[i][j] + opts[i][k]);
-            }
-        }
+    //now 0 2 ... are at the same place, 1 is at the beginning
+    while(color[0] != color[1]){
+        cout << "next 0 1 2 3 4 5 6 7 8 9" << endl;
+        getline(cin, s);
+        process(s, color);
     }
-    dbg(dp);
-    cout << max({dp[n][0], dp[n][1], dp[n][2]}) << endll;
+    cout << "done" << endl;
 }
 
 int32_t main()
@@ -80,7 +120,6 @@ int32_t main()
     dbg("turn off debugging");
     ll T = 1;
     //cin >> T;
-
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
