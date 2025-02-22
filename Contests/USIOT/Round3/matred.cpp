@@ -1,59 +1,40 @@
+#pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 
 using namespace std;
+using ll = long long;
 
-typedef long long ll;
-#define endll '\n'
-#define dbg(x) cerr << #x << " = " << x << endll;
-
-struct matmove{
-    int x1, y1, x2, y2;
-    int val;
-};
-
-int main()
+int main() 
 {
     ios::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
-    
-    int n, m;
+    cin.tie(nullptr);
+
+    ll n, m;
     cin >> n >> m;
-
-    int val;
-    cin >> val;
-    for(int i= 1; i < n * m; i++){
-        int t;
-        cin >> t;
+    vector<vector<ll>> nums(n, vector<ll>(m));
+    vector<ll> rowsum(n), colsum(m);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> nums[i][j];
+            rowsum[i] += nums[i][j];
+            colsum[j] += nums[i][j];
+        }
     }
-    val *= -1;
-
-    vector<matmove> moves;
-    if(n % 3 == 0){
-        for(int top = 0; top < n - 2; top += 3){
-            for(int left = 0; left < m; left++){
-                moves.push_back({top, left, top + 2, left, val});
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (abs(rowsum[j] - rowsum[i]) % 3 != 0) {
+                cout << "YES";
+                return 0;
             }
         }
-        cout << "YES" << endll;
-        cout << moves.size() << endll;
-        for(auto move : moves){
-            cout << move.x1 + 1 << " " << move.y1 + 1 << " " << move.x2 + 1 << " " << move.y2 + 1 << " " << move.val << endll;
-        }
-        return 0;
     }
-    if(m % 3 == 0){
-        for(int left = 0; left < m - 2; left += 3){
-            for(int top = 0; top < n; top++){
-                moves.push_back({top, left, top, left + 2, val});
+    for (int i = 0; i < m - 1; i++) {
+        for (int j = i + 1; m < n; j++) {
+            if (abs(colsum[j] - colsum[i]) % 3 != 0) {
+                cout << "YES";
+                return 0;
             }
         }
-        cout << "YES" << endll;
-        cout << moves.size() << endll;
-        for(auto move : moves){
-            cout << move.x1 + 1 << " " << move.y1 + 1 << " " << move.x2 + 1 << " " << move.y2 + 1 << " " << move.val << endll;
-        }
-        return 0;
     }
-    cout << "NO" << endll;
-    return 0;
-} 
+    cout << "NO\n";
+}

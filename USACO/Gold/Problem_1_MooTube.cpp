@@ -49,31 +49,31 @@ inline void open(string name){
 #endif
 
 struct DSU {
-    vector<ll> e;
+    vector<ll> color;
   DSU(ll N) {
-      e = vector<ll>(N, -1); 
+      color = vector<ll>(N, -1); 
   }
     void init(ll N) { 
-      e = vector<ll>(N, -1); 
+      color = vector<ll>(N, -1); 
   }
     ll get(ll x) { 
-      return e[x] < 0 ? x : e[x] = get(e[x]); 
+      return color[x] < 0 ? x : color[x] = get(color[x]); 
   }
     bool sameSet(ll a, ll b) {
       return get(a) == get(b); 
   }
     ll size(ll x) {
-      return -e[get(x)]; 
+      return -color[get(x)]; 
   }
     bool unite(ll x, ll y) { // union by size
       x = get(x), y = get(y);
       if (x == y)
         return 0;
-      if (e[x] > e[y])
+      if (color[x] > color[y])
         swap(x, y);
   
-      e[x] += e[y];
-      e[y] = x;
+      color[x] += color[y];
+      color[y] = x;
       return 1;
     }
 };
