@@ -115,6 +115,7 @@ string printResult(string pilesraw, string handraw, string drawPileraw) {
     for (int i = 0; i < 7; i++) {
         iss >> token;
         hand.push_back(card(token));
+        //equivalent to token = sc.next(); hand.add(new Card(token));
     }
 
     //allows easy reading and removal of the top value in the card pile
@@ -132,18 +133,18 @@ string printResult(string pilesraw, string handraw, string drawPileraw) {
             //no card can be placed
             break;
         }
-        //whenever current gets updated, p1/p2 are also changed
-        //this is because of the reference variable (card&) on the left
-        card& current = (p == 1) ? p1 : p2;
+        //make the current pile either p1 or p2, based on what findmatch returned
+        card current = (p == 1) ? p1 : p2;
         current = hand[index];
 
         //removes the card from the hand
+        //equivalent to (hand.remove(index);)
         hand.erase(hand.begin() + index);
 
         //calls the auxiliary method when the pile is fixed
         index = findmatch(current, hand);
         while (index != -1) {
-            //this continues to udpate the p1/p2 variable
+            //keep going until nothing can be placed anymore
             current = hand[index];
             hand.erase(hand.begin() + index);
             index = findmatch(current, hand);
@@ -154,6 +155,13 @@ string printResult(string pilesraw, string handraw, string drawPileraw) {
             hand.push_back(drawPile.front()); //add the top card to the hand
             drawPile.pop(); //remove the top card from the pile
         }
+
+        //updating the piles to the new variable
+        if(p == 1) {
+            p1 = current;
+        } else {
+            p2 = current;
+        }   
     }
 
     //to_string allows integer to be converted to string
