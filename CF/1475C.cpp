@@ -48,48 +48,30 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-
-ll f(ll n){
-    return n * (n + 1) / 2;
-}
-
-ll tri_index(ll n){
-    ll low = 0, high = n;
-    while(low < high){
-        ll mid = (low + high) / 2;
-        if(f(mid) == n){
-            return mid;
-        }
-        else if(f(mid) > n){
-            high = mid - 1;
-        }
-        else{
-            low = mid + 1;
-        }
-    }
-    return low;
-}
-
 void solve(int num_tc)
 {
-    ll n, k;
-    cin >> n >> k;
-    k = k * (k + 1) / 2;
-    vll cactus(n);
-    fillv(cactus, n);
-    sort(all(cactus));
+    int a, b, n;
+    cin >> a >> b >> n;
+    vector<ii> pairs(n);
+    map<int, int> acounts;
+    map<int, int> bcounts;
+    map<ii, int> counts;
     for(int i = 0; i < n; i++){
-        if(cactus[i] > k){
-            cout << k << endll;
-            return;
-        }
-        ll ind = tri_index(cactus[i]);
-        if(f(ind) == cactus[i]){
-            cout << f(ind - 1) << endll;
-            return;
-        }
+        cin >> pairs[i].first;
+        acounts[pairs[i].first]++;
     }
-    cout << k << endll;
+    for(int i = 0; i < n; i++){
+        cin >> pairs[i].second;
+        bcounts[pairs[i].second]++;
+    }
+    for(int i = 0; i < n; i++){
+        counts[pairs[i]]++;
+    }
+    ll ans = 0;
+    for(int i = 0; i < n; i++){
+        ans += n - acounts[pairs[i].first] - bcounts[pairs[i].second] + counts[pairs[i]];
+    }
+    cout << ans / 2 << endll;
 }
 
 int32_t main()
@@ -98,7 +80,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    //cin >> T;
+    cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

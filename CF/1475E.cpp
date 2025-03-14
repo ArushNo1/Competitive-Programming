@@ -48,48 +48,46 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-
-ll f(ll n){
-    return n * (n + 1) / 2;
-}
-
-ll tri_index(ll n){
-    ll low = 0, high = n;
-    while(low < high){
-        ll mid = (low + high) / 2;
-        if(f(mid) == n){
-            return mid;
-        }
-        else if(f(mid) > n){
-            high = mid - 1;
-        }
-        else{
-            low = mid + 1;
-        }
+ll invMod(ll x) {
+    if (x <= 1) {
+      return x;
     }
-    return low;
+    return MOD - MOD / x * invMod(MOD % x) % MOD;
+  }
+template<typename T>
+T binom(T n, T k){
+    if(k > n - k){
+        k = n - k;
+    }
+    T value = 1;
+    for (T i = 1; i <= k; ++i) {
+        value = (((value * (n - i + 1)) % MOD) * invMod(i)) % MOD;
+    }
+    return value;
 }
-
 void solve(int num_tc)
 {
-    ll n, k;
+    int n, k;
     cin >> n >> k;
-    k = k * (k + 1) / 2;
-    vll cactus(n);
-    fillv(cactus, n);
-    sort(all(cactus));
+    
+    map<ll, ll, greater<int>> counts;
     for(int i = 0; i < n; i++){
-        if(cactus[i] > k){
-            cout << k << endll;
-            return;
-        }
-        ll ind = tri_index(cactus[i]);
-        if(f(ind) == cactus[i]){
-            cout << f(ind - 1) << endll;
-            return;
-        }
+        int x;
+        cin >> x;
+        counts[x - 1]++;
     }
-    cout << k << endll;
+    if(k >= n){
+        cout << 1 << endll;
+        return;
+    }
+    auto j = counts.begin();
+    while(k >= j->second){
+        k -= j->second;
+        j++;
+    }
+    dbg(*j);
+    dbg(k);
+    cout << binom<ll>(j->second, k) << endll;
 }
 
 int32_t main()
@@ -98,7 +96,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    //cin >> T;
+    cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

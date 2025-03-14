@@ -48,48 +48,42 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+void solve(int num_tc)
+{
+    int n;
+    cin >> n;
+    vll d(n);
+    fillv(d, n);
 
-ll f(ll n){
-    return n * (n + 1) / 2;
-}
-
-ll tri_index(ll n){
-    ll low = 0, high = n;
-    while(low < high){
-        ll mid = (low + high) / 2;
-        if(f(mid) == n){
-            return mid;
+    auto eval = [&](ll vo){
+        vector<vll> dp(n + 1, vll(2, -INF));
+        dp[0][0] = vo;
+        dp[0][1] = 2 * vo;
+        //dp[i][j] is dune i, j doubles;
+        for(int i = 1; i <= n; i++){
+            dp[i][0] = dp[i - 1][0] + d[i - 1];
+            if(dp[i][0] <= 0) dp[i][0] = -INF;
+            dp[i][1] = max(dp[i - 1][0] * 2, dp[i - 1][1]) + d[i - 1];
+            if(dp[i][1] <= 0) dp[i][1] = -INF;
+            if(dp[i][1] == -INF && dp[i][0] == -INF){
+                dbg(dp);
+                return false;
+            }
         }
-        else if(f(mid) > n){
-            high = mid - 1;
+        dbg(dp);
+        return true;
+    };
+    ll low = 1, high = 1e15;
+    while(low < high){
+        ll mid = low + (high - low) / 2;
+        if(eval(mid)){
+            high = mid;
         }
         else{
             low = mid + 1;
         }
     }
-    return low;
-}
-
-void solve(int num_tc)
-{
-    ll n, k;
-    cin >> n >> k;
-    k = k * (k + 1) / 2;
-    vll cactus(n);
-    fillv(cactus, n);
-    sort(all(cactus));
-    for(int i = 0; i < n; i++){
-        if(cactus[i] > k){
-            cout << k << endll;
-            return;
-        }
-        ll ind = tri_index(cactus[i]);
-        if(f(ind) == cactus[i]){
-            cout << f(ind - 1) << endll;
-            return;
-        }
-    }
-    cout << k << endll;
+    cout << low << endll;
 }
 
 int32_t main()

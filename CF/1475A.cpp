@@ -48,48 +48,19 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-
-ll f(ll n){
-    return n * (n + 1) / 2;
-}
-
-ll tri_index(ll n){
-    ll low = 0, high = n;
-    while(low < high){
-        ll mid = (low + high) / 2;
-        if(f(mid) == n){
-            return mid;
-        }
-        else if(f(mid) > n){
-            high = mid - 1;
-        }
-        else{
-            low = mid + 1;
-        }
-    }
-    return low;
-}
-
 void solve(int num_tc)
 {
-    ll n, k;
-    cin >> n >> k;
-    k = k * (k + 1) / 2;
-    vll cactus(n);
-    fillv(cactus, n);
-    sort(all(cactus));
-    for(int i = 0; i < n; i++){
-        if(cactus[i] > k){
-            cout << k << endll;
-            return;
-        }
-        ll ind = tri_index(cactus[i]);
-        if(f(ind) == cactus[i]){
-            cout << f(ind - 1) << endll;
-            return;
-        }
+    ll n;
+    cin >> n;
+    while(n % 2 == 0){
+        n /= 2;
     }
-    cout << k << endll;
+    if(n > 1){
+        cout << "YES" << endll;
+    }
+    else{
+        cout << "NO" << endll;
+    }
 }
 
 int32_t main()
@@ -98,7 +69,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    //cin >> T;
+    cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

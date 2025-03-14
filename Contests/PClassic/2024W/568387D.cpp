@@ -48,48 +48,39 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-
-ll f(ll n){
-    return n * (n + 1) / 2;
-}
-
-ll tri_index(ll n){
-    ll low = 0, high = n;
-    while(low < high){
-        ll mid = (low + high) / 2;
-        if(f(mid) == n){
-            return mid;
-        }
-        else if(f(mid) > n){
-            high = mid - 1;
-        }
-        else{
-            low = mid + 1;
-        }
-    }
-    return low;
-}
-
 void solve(int num_tc)
 {
-    ll n, k;
-    cin >> n >> k;
-    k = k * (k + 1) / 2;
-    vll cactus(n);
-    fillv(cactus, n);
-    sort(all(cactus));
+    int n, m;
+    cin >> n >> m;
+    vvi diag(n + m - 1);
+    int total = 0;
     for(int i = 0; i < n; i++){
-        if(cactus[i] > k){
-            cout << k << endll;
-            return;
-        }
-        ll ind = tri_index(cactus[i]);
-        if(f(ind) == cactus[i]){
-            cout << f(ind - 1) << endll;
-            return;
+        for(int j = 0; j < m; j++){
+            int x;
+            cin >> x;
+            diag[i + j].push_back(x);
+            total += x != 0;
         }
     }
-    cout << k << endll;
+    dbg(diag);
+    int ans = 0;
+    for(int d = 0; d < m + n - 1; d++){
+        dbg(d);
+        dbg(diag[d]);
+        int ocount = 0, tcount = 0;
+        for(int j : diag[d]){
+            if(j == 0) continue;
+            if(j == 1) ocount++;
+            else tcount++;
+            if(j == 1 && tcount > 0){
+                ans++;
+                tcount--;
+                ocount--;
+            }
+        }
+    }
+    dbg(ans);
+    cout << total - 2 * ans << endll;
 }
 
 int32_t main()
