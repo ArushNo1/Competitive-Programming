@@ -101,6 +101,7 @@ void solve(int num_tc)
     for(int i = 0; i < n; i++){
         int l, r;
         cin >> l >> r;
+        //l = nextInt(), r = nextInt()
         if(l - prev >= s){
             yes = true;
         }
@@ -121,3 +122,15 @@ int main()
         solve(t+1);
     }
 }
+
+
+/*
+
+l r   r -> l
+l r
+l r
+l r
+
+0 2  2->3
+3 5
+*/

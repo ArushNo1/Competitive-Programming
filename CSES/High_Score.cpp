@@ -50,35 +50,35 @@ inline void open(string name){
 
 bool bellman_ford(vector<ll>& distance, vector<pair<pair<ll, ll>,ll>>& edges, ll x, ll n)
 {
-	for (int i = 0; i < n; i++) distance[i] = INF;
-	distance[x] = 0;
-	for (int i = 0; i < n-1; i++) 
-	{
-		for (auto e : edges) 
-		{
-			ll a, b, w;
-			a = e.first.first;
-			b = e.first.second;
-			w = e.second;
-			distance[b] = min(distance[b], distance[a] + w);
-		}
-	}
-	
-	bool negCycle = false;
-	for (auto e : edges) 
-	{
-		ll a, b, w;
-		a = e.first.first;
-		b = e.first.second;
-		w = e.second;
-		if(distance[b] > distance[a] + w)
-		{
-			negCycle = true;
-			break;
-		}
-	}
-	
-	return negCycle;
+    for (int i = 0; i < n; i++) distance[i] = INF;
+    distance[x] = 0;
+    for (int i = 0; i < n-1; i++) 
+    {
+        for (auto e : edges) 
+        {
+            if (distance[e.first.first] == INF) continue;
+            ll a = e.first.first;
+            ll b = e.first.second;
+            ll w = e.second;
+            distance[b] = min(distance[b], distance[a] + w);
+        }
+    }
+    
+    bool negCycle = false;
+    for (auto e : edges) 
+    {
+        ll a = e.first.first;
+        ll b = e.first.second;
+        ll w = e.second;
+        if(distance[a] == INF) continue;
+        if(distance[b] > distance[a] + w)
+        {
+            negCycle = true;
+            break;
+        }
+    }
+    
+    return negCycle;
 }
 void solve(int num_tc)
 {
@@ -91,7 +91,6 @@ void solve(int num_tc)
         a--;
         b--;
         cin >> c;
-        if(a == b) continue;
         pll edge = {a, b};
         if (edgemap.find(edge) == edgemap.end()) {
             edgemap[edge] = -c;
@@ -101,7 +100,29 @@ void solve(int num_tc)
     }
     vector<pair<pair<ll, ll>,ll>> edges(all(edgemap));
     vector<ll> distance(n);
-    if(bellman_ford(distance, edges, 0, n)){
+    bellman_ford(distance, edges, 0, n);
+
+
+    vector<bool> affected(n, false);
+    for (int i = 0; i < n; i++) { 
+        for (auto e : edges) {
+            ll a = e.first.first, b = e.first.second, w = e.second;
+            if (a == b){
+                if(w < 0){
+                    affected[b] = true;
+                }
+                continue;
+            }
+            if (distance[a] == INF) continue;
+            if (distance[b] > distance[a] + w) {
+                distance[b] = distance[a] + w;
+                affected[b] = true;
+            }
+            if (affected[a])
+                affected[b] = true;
+        }
+    }
+    if(affected[n-1]){
         cout << -1 << endll;
     }
     else{

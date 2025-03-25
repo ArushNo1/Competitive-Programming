@@ -92,6 +92,9 @@ public class A_Circle_of_Students {
             return;
         }
         System.out.println("NO");
+
+
+        Scanner sc = new Scanner(System.in);
     }
 
     public static void main(String[] args) {
