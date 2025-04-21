@@ -98,7 +98,7 @@
     "java.debug.settings.onBuildFailureProceed": true,
     "editor.snippetSuggestions": "none",
     "cph.general.autoShowJudge": false,
-    "cph.general.useShortCodeForcesName": false,
+    "cph.general.useShortCodeForcesName": true,
     "cph.general.menuChoices": "cpp java python",
     "cph.general.firstTime": false,
     //"cph.general.useShortCodeforcesName": true,
