@@ -101,6 +101,7 @@
     "cph.general.useShortCodeForcesName": true,
     "cph.general.menuChoices": "cpp java python",
     "cph.general.firstTime": false,
+
     //"cph.general.useShortCodeforcesName": true,
     //"cph.general.defaultLanguage": "",
     //"cph.general.defaultLanguageTemplateFileLocation": "/home/arush/training/cp-templates/.JAVA/CLASS_NAME.java"

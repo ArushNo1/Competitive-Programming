@@ -2,32 +2,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "Main",
+            "name": "C++ Run (Linux)",
+            "type": "cppdbg",
             "request": "launch",
-            "mainClass": "Main",
-            "projectName": "Training_3f72ac03"
-        },
-        {
-            "type": "java",
-            "name": "main",
-            "request": "launch",
-            "mainClass": "main",
-            "projectName": "Training_3f72ac03"
-        },
-        {
-            "type": "java",
-            "name": "Main",
-            "request": "launch",
-            "mainClass": "Main",
-            "projectName": "Training_9e5bc604"
-        },
-        {
-            "type": "java",
-            "name": "Main",
-            "request": "launch",
-            "mainClass": "${fileBasenameNoExtension}",
-            "projectName": "Training_9e5bc604"
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: g++ build active file"
         },
         {
             "name": "C++ Windows Debug",
