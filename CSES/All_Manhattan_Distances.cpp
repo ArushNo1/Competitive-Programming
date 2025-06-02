@@ -11,7 +11,7 @@ tree_order_statistics_node_update> indexed_set;
 
 typedef vector<int> vi;
 typedef vector<vi> vvi;
-typedef long long ll;
+typedef __int128_t ll;
 typedef vector<ll> vll;
 typedef pair<ll, ll> pll;
 
@@ -46,43 +46,51 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    string s;
-    cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
-
-    if(b > e){
-        swap(b, e);
-        flip = true;
+    int n;
+    cin >> n;
+    vll x(n);
+    vll y(n);
+    for(int i= 0; i < n; i++){
+        int a, b;
+        cin >> a >> b;
+        x[i] = a;
+        y[i] = b;
     }
-
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
+    if(n == 1){
+        cout << 0 << endll;
+        return;
     }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
+    sort(all(x));
+    sort(all(y));
+    for(int i = 1; i < n; i++){
+        x[i] -= x[0];
+        y[i] -= y[0];
     }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
+    x[0] = 0;
+    y[0] = 0;
+    ll ans = 0;
+    ll sumx = x[0], sumy = y[0];
+    for(ll i = 1; i < n; i++){
+        ans += i * x[i] - sumx;
+        sumx += x[i];
+        ans += i * y[i] - sumy;
+        sumy += y[i];
     }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
+    auto int128_to_string = [](ll value) -> string {
+        if (value == 0) return "0";
+        bool neg = value < 0;
+        string res;
+        ll v = value;
+        if (neg) v = -v;
+        while (v > 0) {
+            res += '0' + int(v % 10);
+            v /= 10;
+        }
+        if (neg) res += '-';
+        reverse(res.begin(), res.end());
+        return res;
+    };
+    cout << int128_to_string(ans) << endll;
 }
 
 int32_t main()
@@ -91,7 +99,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

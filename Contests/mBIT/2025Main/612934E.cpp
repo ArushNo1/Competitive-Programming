@@ -44,51 +44,69 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+vector<ll> primes;
+void sieve(vector<bool>& is_prime, ll n)
+{
+    is_prime[0] = is_prime[1] = false;
+    for (ll i = 2; i <= n; i++) {
+        if (is_prime[i] && (ll)i * i <= n) {
+            for (ll j = i * i; j <= n; j += i)
+                is_prime[j] = false;
+        }
+    }
+}
+
 void solve(int num_tc)
 {
-    string s;
-    cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
+    int n;
+    cin >> n;
+    vll nums(n);
+    fillv(nums, n);
 
-    if(b > e){
-        swap(b, e);
-        flip = true;
+    ll ans = 0;
+    set<pair<ll, ll>> states;
+    for(int i = 0; i < n; i++)
+    {
+        states.insert({nums[i], 1});
+        if(states.count({1, nums[i] - 1}))
+        {
+            states.insert({1, nums[i]});
+        }
+
+        //prime factorize nums[i]
+        if(nums[i] == 1) continue;
+
+        for(ll j = 2; j*j <= nums[i]; j++)
+        {
+            if(nums[i] % j == 0)
+            {
+                ll fac1 = j;
+                ll fac2 = nums[i] / j;
+                if(states.count({fac1, fac2 - 1}))
+                {
+                    states.insert({fac1, fac2});
+                }
+
+                if(states.count({fac2, fac1 - 1}))
+                {
+                    states.insert({fac2, fac1});
+                }
+            }
+        }
     }
 
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
+    for(auto& state : states)
+    {
+        ans = max(ans, state.second);
     }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
-    }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
-    }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
+    cout << ans << endll;
 }
 
 int32_t main()
 {
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);  
+
     dbg("turn off debugging");
     ll T = 1;
     cin >> T;

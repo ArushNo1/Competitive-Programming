@@ -46,43 +46,20 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
+    map<string, string> ans;
+    ans["Apollo"] = "Leto";
+    ans["Ares"] = "Hera";
+    ans["Artemis"] = "Leto";
+    ans["Demeter"] = "Rhea";
+    ans["Hades"] = "Rhea";
+    ans["Hera"] = "Rhea";
+    ans["Hephaestus"] = "Hera";
+    ans["Hestia"] = "Rhea";
+    ans["Poseidon"] = "Rhea";
+    ans["Zeus"] = "Rhea";
     string s;
     cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
-
-    if(b > e){
-        swap(b, e);
-        flip = true;
-    }
-
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
-    }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
-    }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
-    }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
+    cout << ans[s] << endll;
 }
 
 int32_t main()
@@ -91,7 +68,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

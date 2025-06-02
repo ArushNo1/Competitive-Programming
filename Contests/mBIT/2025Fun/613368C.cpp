@@ -46,43 +46,29 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    string s;
-    cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
-
-    if(b > e){
-        swap(b, e);
-        flip = true;
-    }
-
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
-    }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
-    }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
-    }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
+    int n; cin >> n;
+    cin.ignore();
+    int ans = 0;
+    for(int i = 0; i < n; i++)
+    {
+        int r; cin >> r;
+        cin.ignore();
+        int digit = 0;
+        for(int line = 0; line < r; line++)
+        {
+            string s; getline(cin, s);
+            map<string, int> digits{};
+            digits["down up forward down up forward down up forward down up"] = 4;
+            digits["down up forward down up forward down up"] = 3;
+            digits["down up forward down up"] = 2;
+            digits["down up"] = 1;
+            digits["down forward up"] = 5;
+            digits["shell"] = 0;
+            digit += digits[s];
+        }
+        ans = ans * 20 + digit;
+    }  
+    cout << ans << endll;
 }
 
 int32_t main()
@@ -91,8 +77,9 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }
 }
+ 

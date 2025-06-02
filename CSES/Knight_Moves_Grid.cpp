@@ -46,43 +46,44 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    string s;
-    cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
+    int n;
+    cin >> n;
+    vector<vector<int>> grid(n, vector<int>(n, inf));
+    grid[0][0] = 0;
+    vector<pair<int, int>> moves = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, 
+                                                 {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
 
-    if(b > e){
-        swap(b, e);
-        flip = true;
-    }
+    priority_queue<pll, vector<pll>, greater<pll>> q;
+    q.push({0, 0});
+    while(!q.empty()) {
+        auto [dist, idx] = q.top();
+        q.pop();
+        int x = idx / n;
+        int y = idx % n;
 
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
+        if (dist > grid[x][y]) continue;
+
+        for (auto [dx, dy] : moves) {
+            int nx = x + dx;
+            int ny = y + dy;
+            if (nx >= 0 && nx < n && ny >= 0 && ny < n) {
+                if (grid[nx][ny] > dist + 1) {
+                    grid[nx][ny] = dist + 1;
+                    q.push({grid[nx][ny], nx * n + ny});
+                }
+            }
+        }
     }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if (grid[i][j] == inf) {
+                cout << -1 << " ";
+            } else {
+                cout << grid[i][j] << " ";
+            }
+        }
+        cout << endll;
     }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
-    }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
 }
 
 int32_t main()
@@ -91,7 +92,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

@@ -46,43 +46,30 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    string s;
-    cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
-
-    if(b > e){
-        swap(b, e);
-        flip = true;
+    int n;
+    cin >> n;
+    vll price(n);
+    fillv(price, n);
+    for(int i = 0; i < n; i++){
+        int x;
+        cin >> x;
+        price[i] = x - price[i];
     }
-
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
+    sort(all(price));
+    dbg(price);
+    //pick off minimal groups such that their sum is non-negtiave
+    int pairs = 0;
+    int np = 0, pp = n - 1;
+    while(np < pp){
+        if(price[np] + price[pp] >= 0){
+            pairs++;
+            np++;
+            pp--;
+        } else {
+            np++;
+        }
     }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
-    }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
-    }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
+    cout << pairs << endll;
 }
 
 int32_t main()

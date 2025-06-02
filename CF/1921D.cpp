@@ -46,43 +46,32 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    string s;
-    cin >> s;
-    char b = s[0];
-    char e = s.back();
-    bool flip = false;
-    s.erase(s.begin());
-    s.pop_back();
+    int n, m;
+    cin >> n >> m;
+    vi a(n);
+    vi b(m);
+    fillv(a, n);
+    fillv(b, m);
+    sort(all(a), greater<int>());
+    sort(all(b));
 
-    if(b > e){
-        swap(b, e);
-        flip = true;
+    ll ans = 0;
+    int al = 0, bl = 0;
+    int ar = n - 1, br = m - 1;
+    while(al <= ar){
+        int left = abs(a[al] - b[bl]);
+        int right = abs(a[ar] - b[br]);
+        if(left > right){
+            ans += left;
+            al++;
+            bl++;
+        } else {
+            ans += right;
+            ar--;
+            br--;
+        }
     }
-
-    vector<int> ans;
-    
-    if(flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    vector<pair<char, int>> v;
-    for(int i = 0; i < s.size(); i++){
-        v.push_back({s[i], i + 1});
-    }
-    sort(all(v));
-    int i = lower_bound(all(v), make_pair(b, 0)) - v.begin();
-    for(; i < v.size(); i++){
-        if(v[i].first > e) break;
-        ans.push_back(v[i].second);
-    }
-    if(!flip) ans.push_back(s.size() + 1);
-    else ans.push_back(0);
-    if(flip){
-        reverse(all(ans));
-    }
-    cout << abs(b - e) << " " << ans.size() << endll;
-    for(int i = 0; i < ans.size(); i++){
-        cout << ans[i] + 1 << " ";
-    }
-    cout << endll;
+    cout << ans << endll;
 }
 
 int32_t main()
