@@ -48,25 +48,48 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
+    vi a(n);
+    fillv(a, n);
+    vi b(n);
+    fillv(b, n);
+    vi index(n + 1, - 1);
+    for(int i = n - 1; i >= 0; i--){
+        if(a[i] == b[i]){
+            cout << (i + 1) << endll;
+            return;
+        }
+        if(index[a[i]] == -1){
+            index[a[i]] = i;
+        }
+        else{
+            if(index[a[i]] == (i + 1)){
+                if(a[i + 1] == a[i]){
+                    cout << (i + 1) << endll;
+                    return;
+                }
+            }
+            else{
+                cout << (i + 1) << endll;
+                return;
             }
         }
-        
-        dbg(cnt);
-        dbg(ans);
+        if(index[b[i]] == -1){
+            index[b[i]] = i;
+        }
+        else{
+            if(index[b[i]] == (i + 1)){
+                if(b[i + 1] == b[i]){
+                    cout << (i + 1) << endll;
+                    return;
+                }
+            }
+            else{
+                cout << (i + 1) << endll;
+                return;
+            }
+        }
     }
-    cout << ans << endll;
+    cout << 0 << endll;
 }
 
 int32_t main()

@@ -48,25 +48,54 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    int x;
+    cin >> x;
+    vector<pll> guards(n);
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
+        cin >> guards[i].first >> guards[i].second;
+    }
+    dbg(guards);
+    vector<ll> numguards(201, 0);
+    for(int i = 0; i < n; i++){
+        for(int j = guards[i].first; j < guards[i].second; j++){
+            numguards[j]++;
+        }
+    }
+    ll maxval = 0;
+    for(int i = 0; i < n; i++){
+        maxval = max(maxval, guards[i].second);
+    }
+    for(int i = 0; i < n; i++){
+        int zcount = 0;
+        int start = -1;
+        int value = maxval;
+        for(int j = guards[i].first; j < guards[i].second; j++){
+            numguards[j]--;
+        }
+        dbg(i);
+        dbg(numguards);
+        for(int j = 0; j <= guards[i].second + x; j++){
+            if(numguards[j] == 0){
+                zcount++;
+                if(zcount == 1){
+                    start = j;
+                }
+                if(zcount == x){
+                    value = start;
+                    break;
+                }
+            }
+            else{
+                zcount = 0;
+                start = -1;
             }
         }
-        
-        dbg(cnt);
-        dbg(ans);
+        for(int j = guards[i].first; j < guards[i].second; j++){
+            numguards[j]++;
+        }
+        cout << value << " ";
     }
-    cout << ans << endll;
+    cout << endll;
 }
 
 int32_t main()

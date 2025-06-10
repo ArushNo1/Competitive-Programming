@@ -48,23 +48,22 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    map<int, int> cnt;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+        int x;
+        cin >> x;
+        //repeatedly divide by 2
+        while(x % 2 == 0) {
+            x /= 2;
         }
-        
-        dbg(cnt);
-        dbg(ans);
+        cnt[x]++;
+    }
+    int ans = 0;
+    for(auto& [key, value] : cnt) {
+        //add value choose 3
+        if(value >= 3) {
+            ans += (value * (value - 1) * (value - 2)) / 6; 
+        }
     }
     cout << ans << endll;
 }

@@ -48,25 +48,35 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    vector<ll> barr(n);
+    set<ll> perm;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+        ll x;
+        cin >> x;
+        perm.insert(2 * (i + 1));
+        perm.insert(2 * i + 1);
+        barr[i] = x;
     }
-    cout << ans << endll;
+    dbg(perm);
+    vll a(2 * n);
+    for(int i = 0; i < n; i++){
+        a[2 * i] = barr[i];
+        perm.erase(barr[i]);
+    }
+    dbg(perm);
+    for(int i = 1; i < 2 * n; i+=2){
+        auto it = perm.lower_bound(a[i - 1]);
+        if(it == perm.end()){
+            cout << -1 << endll;
+            return;
+        }
+        a[i] = *it;
+        perm.erase(it);
+    }
+    for(int i = 0; i < 2 * n; i++){
+        cout << a[i] << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()

@@ -48,25 +48,25 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+    string s;
+    cin >> s;
+    
+    for(int c = '0'; c <= '9'; c++){
+        int x = count(all(s), c);
+        if(x == n){
+            cout << 0 << endll;
+            return;
         }
-        
-        dbg(cnt);
-        dbg(ans);
+        if(x == n - 1){
+            cout << 1 << endll;
+            return;
+        }
     }
-    cout << ans << endll;
+    if(s[0] == s.back()){
+        cout << 1 << endll;
+        return;
+    }
+    cout << 2 << endll;
 }
 
 int32_t main()

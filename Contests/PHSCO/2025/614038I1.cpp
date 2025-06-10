@@ -46,24 +46,35 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    dbg(num_tc);
+    int n, m;
+    cin >> m >> n;
+    vector<string> sets(n);
+    fillv(sets, n);
+    int ans = 1;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
+        if(sets[i][0] == '0'){
+            ans = 0;
+            break;
+        }
+    }
+    dbg(ans);
+    bool disable = ans == 1;
+    for(int i = 1; i < m; i++){
+        dbg(i);
+        bool pass = false;
+        for(int j = 0; j < n; j++){
+            if(sets[j][i] == '0' && sets[j][i-1] == '0'){
+                pass = true;
+                break;
+            }
+            if(disable && sets[j][i] == '0'){
+                pass = true;
+                break;
             }
         }
-        
-        dbg(cnt);
+        disable = !pass;
+        ans += disable;
         dbg(ans);
     }
     cout << ans << endll;

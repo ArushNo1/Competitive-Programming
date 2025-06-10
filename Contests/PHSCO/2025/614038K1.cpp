@@ -46,27 +46,31 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    int n, m;
+    cin >> n >> m;
+    vll a(n);
+    fillv(a, n);
+    vll b(n);
+    fillv(b, n);
+
+    vll ap(n + 1, 0);
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+        ap[i + 1] = ap[i] + a[i];
     }
-    cout << ans << endll;
+    vll bp(n + 1, 0);
+    for(int i = 0; i < n; i++){
+        bp[i + 1] = bp[i] + b[i];
+    }
+    ll maxans = -INF;
+    for(int i = 0; i <= n - m; i++){
+        for(int j = i + m; j <= n - m; j++){
+            //from i to i + m, and then j to j + m
+            ll ans = ap[i] - ap[0] + ap[j] - ap[i + m] + ap[n] - ap[j + m];
+            ans += bp[i + m] - bp[i] + bp[j + m] - bp[j];
+            maxans = max(maxans, ans);
+        }
+    }
+    cout << maxans << endll;
 }
 
 int32_t main()

@@ -46,26 +46,28 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+    ll n, l;
+    cin >> n >> l;
+    vll points(n);
+    points[0] = 0;
+    for(int i = 1; i < n; i++){
+        cin >> points[i];
+        points[i] += points[i-1];
+        points[i] %= l;
     }
+    if(l % 3 != 0){
+        cout << "0" << endll;
+        return;
+    }
+    vector<vll> res(3, vll(l / 3, 0));
+    for(int i = 0; i < n; i++){
+        res[points[i] / (l / 3)][points[i] % (l / 3)]++;
+    }
+    ll ans = 0;
+    for(int i = 0; i < res[0].size(); i++){
+        ans += res[0][i] * res[1][i] * res[2][i];
+    }
+    
     cout << ans << endll;
 }
 
@@ -75,7 +77,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

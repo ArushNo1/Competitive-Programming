@@ -48,34 +48,23 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
+    vi nums(n);
+    fillv(nums, n);
+    sort(all(nums), greater<int>());
+    
     int ans = 0;
-    int cnt = 0;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+        ans = max(ans, min(nums[i], i + 1));
     }
     cout << ans << endll;
 }
-
 int32_t main()
 {
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

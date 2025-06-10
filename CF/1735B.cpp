@@ -48,23 +48,17 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
+    vi nums(n);
+    fillv(nums, n);
+    sort(all(nums));
+    int msize = 2 * nums[0] - 1;
+    int msize2 = (nums[0] + 1) / 2;
     int ans = 0;
-    int cnt = 0;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+        ans += (nums[i] / msize);
+        if(nums[i] % msize > msize2){
+            ans++;
         }
-        
-        dbg(cnt);
-        dbg(ans);
     }
     cout << ans << endll;
 }

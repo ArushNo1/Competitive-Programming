@@ -46,27 +46,43 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
+    //if at any point, an add, or mult hen i > 0
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    vector<pair<int, bool>> v(n, {-inf, false}); // {max_addition, has_multiply}
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
+        int k;
+        cin >> k;
+        for(int j = 0; j < k; j++){
+            string s;
+            int t;
+            cin >> s >> t;
+            if(s == "MLT" && (t > 1)){
+                v[i].second = true;
+            }
+            else if(s == "ADD"){
+                v[i].first = max(v[i].first, t);
+            }
+            else if(s == "SUB"){
+                v[i].first = max(v[i].first, -t);
             }
         }
-        
-        dbg(cnt);
-        dbg(ans);
     }
-    cout << ans << endll;
+    int tokens = 1;
+    for(int i = 0; i < n; i++){
+        if(tokens > 0 && v[i].second){
+            cout << "YES" << endll;
+            return;
+        }
+        else if(v[i].first > 0){
+            cout << "YES" << endll;
+            return;
+        }
+        else{
+            tokens += v[i].first;
+        }
+    }
+    cout << "NO" << endll;
 }
 
 int32_t main()

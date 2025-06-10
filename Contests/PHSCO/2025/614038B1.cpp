@@ -48,25 +48,18 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    int sum = 0;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+        int x;
+        cin >> x;
+        sum += x;
     }
-    cout << ans << endll;
+    for(int i = 0; i < n; i++){
+        int x;
+        cin >> x;
+        sum -= x;
+    }
+    cout << max(0, sum) << endll;
 }
 
 int32_t main()

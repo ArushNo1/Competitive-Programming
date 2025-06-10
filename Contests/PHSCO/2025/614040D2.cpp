@@ -46,27 +46,10 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
-    }
-    cout << ans << endll;
+    ll n, x;
+    cin >> n >> x;
+    ll lucky = gcd(n, x);
+    cout << n - (n / lucky) << endll;
 }
 
 int32_t main()

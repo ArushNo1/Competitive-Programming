@@ -48,25 +48,22 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+    vi nums(n);
+    fillv(nums, n);
+    int numseg = 1;
+    set<int> curseg;
+    set<int> prevseg;
+    prevseg.insert(nums[0]);
+    for(int i = 1; i < n; i++){
+        curseg.insert(nums[i]);
+        prevseg.erase(nums[i]);
+        if(prevseg.empty()){
+            numseg++;
+            prevseg = curseg;
+            curseg.clear();
         }
-        
-        dbg(cnt);
-        dbg(ans);
     }
-    cout << ans << endll;
+    cout << numseg << endll;
 }
 
 int32_t main()

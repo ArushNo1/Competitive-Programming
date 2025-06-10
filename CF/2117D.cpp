@@ -48,25 +48,37 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+    vi nums(n);
+    fillv(nums, n);
+    if(n == 1){
+        cout << "YES" << endll;
+        return;
     }
-    cout << ans << endll;
+    for(int i = 0; i < n; i++){
+        if(nums[i] < min(i + 1, n - i)){
+            cout << "NO" << endll;
+            return;
+        }
+    }
+    ll d = nums[1] - nums[0];
+    for(int i = 1; i < n; i++){
+        if(nums[i] - nums[i - 1] != d){
+            cout << "NO" << endll;
+            return;
+        }
+    }
+    ll c = nums[0] - d;
+    if(c < 0 || (c % (n + 1)) != 0){
+        cout << "NO" << endll;
+        return;
+    }
+    ll y = c / (n + 1);
+    ll x = y + d;
+    if(x < 0 || y < 0){
+        cout << "NO" << endll;
+        return;
+    }
+    cout << "YES" << endll;
 }
 
 int32_t main()

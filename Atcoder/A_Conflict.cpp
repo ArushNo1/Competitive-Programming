@@ -48,25 +48,15 @@ void solve(int num_tc)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+    string a, b;
+    cin >> a >> b;
+    for(int i = 0; i < n ;i++){
+        if(a[i] == 'o' && b[i] == 'o'){
+            cout << "Yes" << endll;
+            return;
         }
-        
-        dbg(cnt);
-        dbg(ans);
     }
-    cout << ans << endll;
+    cout << "No" << endll;
 }
 
 int32_t main()
@@ -75,7 +65,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

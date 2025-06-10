@@ -46,27 +46,19 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
+    int n, x;
+    cin >> n >> x;
+    vi nums(n);
+    fillv(nums, n);
+    int firstzero = -1;
+    int lastzero = -1;
     for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+        if(nums[i] == 1){
+            if(firstzero == -1) firstzero = i;
+            lastzero = i;
         }
-        
-        dbg(cnt);
-        dbg(ans);
     }
-    cout << ans << endll;
+    cout << ((lastzero - firstzero + 1) <= x ? "YES" : "NO") << endll;
 }
 
 int32_t main()

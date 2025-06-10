@@ -46,26 +46,12 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
+    ll n;
     cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
-    }
+    n = n / 2;
+
+    ll ans = (n) * (n + 1) * (2 * n + 1) / 6;
+    ans *= 8;
     cout << ans << endll;
 }
 

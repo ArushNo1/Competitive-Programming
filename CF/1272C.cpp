@@ -46,27 +46,27 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
+    ll n, k;
+    cin >> n >> k;
+    ll ans = 0;
+    string s;
+    cin >> s;
+    set<char> good;
+    for(int i = 0; i < k; i++) {
         char c;
         cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
-        }
-        
-        dbg(cnt);
-        dbg(ans);
+        good.insert(c);
     }
-    cout << ans << endll;
+    ll count = 0;
+    for(int i = 0; i < n; i++){
+        if(good.count(s[i])){
+            count++;
+        } else {
+            ans += (count * (count + 1)) / 2;
+            count = 0;
+        }
+    }
+    cout << ans + (count * (count + 1)) / 2 << endll;
 }
 
 int32_t main()
@@ -75,7 +75,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

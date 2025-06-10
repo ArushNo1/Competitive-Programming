@@ -46,27 +46,23 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
-        if(c == '('){
-            cnt++;
-        } else {
-            cnt--;
-            if(cnt < 0){
-                ans++;
-                cnt = 0;
-            }
+    int n, b, x;
+    cin >> n >> b >> x;
+    int start = b;
+    int counter = 1;
+    b = (start + x) % n;
+    while(true){
+        if(b == start){
+            cout << -1 << endll;
+            return;
         }
-        
-        dbg(cnt);
-        dbg(ans);
+        if(b == 0){
+            cout << counter << endll;
+            return;
+        }
+        counter++;
+        b = (b + x) % n;
     }
-    cout << ans << endll;
 }
 
 int32_t main()
