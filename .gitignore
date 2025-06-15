@@ -39,6 +39,6 @@ main*
 
 /bin
 cp-templates
-libs
-Contests/ACL-IT-25
 .clang-format
+.cph
+compile_flags.txt
