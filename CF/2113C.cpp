@@ -47,22 +47,37 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
+    int n, m, k;
+    cin >> n >> m >> k;
+    k = k * 2 - 1;
+    vvi pref(n + 1, vi(m + 1, 0));
+    vector<string> grid(n);
     for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+        cin >> grid[i];
+        for(int j = 0; j < m; j++){
+            pref[i + 1][j + 1] = pref[i][j + 1] + pref[i + 1][j] - pref[i][j] + (grid[i][j] == 'g');
+        }
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
-        return;
+    dbg(pref);
+    int ans = pref[n][m];
+    dbg(ans);
+    //find a bomb that deletees the minimum possible
+    for(int i= 0; i< n; i++){
+        for(int j =0; j < m; j++){
+            if(grid[i][j] != '.') continue;
+            int x1 = i - (k / 2);
+            int y1 = j - (k / 2);
+            int x2 = i + (k / 2);
+            int y2 = j + (k / 2);
+            x1 = max(x1, 0);
+            y1 = max(y1, 0);
+            x2 = min(x2, n - 1);
+            y2 = min(y2, m - 1);
+            int cur = pref[x2 + 1][y2 + 1] - pref[x1][y2 + 1] - pref[x2 + 1][y1] + pref[x1][y1];
+            ans = min(ans, cur);
+        }
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    cout << pref[n][m] - ans << endll;
 }
 
 int32_t main()

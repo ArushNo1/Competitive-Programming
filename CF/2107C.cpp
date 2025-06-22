@@ -36,7 +36,7 @@ inline void open(string name){
 }    
 
 //comment to enable debugging
-//!#define dbg(x)
+//#define dbg(x)
 
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
@@ -47,34 +47,173 @@ inline void open(string name){
 void solve(int num_tc)
 {
     ll n, k;
-    cin >> n >> k;
-    string knon;
-    cin >> knon;
-    vector<int> kpref(n + 1, 0);
-    vector<ll> nums(n);
+    string s;
+    cin >> n >> k >> s;
+    vll nums(n);
     fillv(nums, n);
-    vector<ll> pref(n + 1, 0);
-    for (ll i = 0; i < n; ++i) {
-        pref[i + 1] = pref[i] + nums[i];
-        kpref[i + 1] = kpref[i] + (knon[i] == '1');
+
+    auto max_subarray_sum = [&](ll l, ll r){
+        ll max_sum = nums[l];
+        ll cur_sum = nums[l];
+        for(ll i = l + 1; i <= r; i++){
+            cur_sum = max(nums[i], cur_sum + nums[i]);
+            max_sum = max(max_sum, cur_sum);
+        }
+        return max_sum;
+    };
+    ll start = -1;
+    vector<array<ll, 3>> sums; // {start, end, sum}
+    for(int e = 0; e < n; e++){
+        if(s[e] == '1'){
+            if(start == -1){
+                start = e;
+            }
+        } else {
+            if(start != -1){
+                ll max_sum = (max_subarray_sum(start, e - 1));
+                if(max_sum > k){
+                    cout << "No" << endll;
+                    return;
+                }
+                start = -1;
+                sums.push_back({start, e - 1, max_sum});
+            }
+        }
     }
-    vector<pll> maxsegs;
-    ll maxsum = -INF;
-    ll minpref = 0;
-    for(int i = 0; i <= n; i++){
-        if(pref[i] <= pref[minpref]){
-            minpref = i;
+    if(start != -1){
+        ll max_sum = (max_subarray_sum(start, n - 1));
+        if(max_sum > k){
+            cout << "No" << endll;
+            return;
         }
-        if(pref[i] - minpref == maxsum){
-            maxsegs.push_back({minpref, i});
+        sums.push_back({start, n - 1, max_sum});
+    }
+    if(sums.size() == 0){
+        cout << "Yes" << endll;
+        cout << k << " ";
+        for(int i = 0; i < n - 1; i++){
+            cout << ll(-1e17) << " ";
         }
-        if(pref[i] - minpref > maxsum){
-            maxsegs = {make_pair(minpref, i)};
-            maxsum = pref[i] - minpref;
+        cout << endll;
+        return;
+    }
+
+
+    //all sums have been loaded in. NOw, see how to make them k
+
+    for(auto [l, r, sum] : sums){
+        if(sum == k){
+            cout << "Yes" << endll;
+            for(int i = 0; i < n; i++){
+                if(s[i] == '1'){
+                    cout << nums[i] << " ";
+                } else {
+                    cout << ll(-1e17) << " ";
+                }
+            }
+            cout << endll;
+            return;
         }
     }
-    dbg(maxsegs);
-    dbg(kpref);
+    for(auto [l, r, sum] : sums){
+        //see if left or right are available
+        if(l > 0){
+            if(l > 1 && s[l - 2] == '1'){
+                continue;
+            }
+            s[l - 1] = '1';
+            nums[l - 1] = 1e14;
+            ll new_sum = max_subarray_sum(l - 1, r);
+            new_sum -= 1e14;
+            nums[l - 1] = 0;
+            if(new_sum > k){
+                continue;
+            }
+            nums[l - 1] = k - new_sum;
+            if(new_sum < 0){
+                nums[l - 1] = k;
+            }
+            cout << "Yes" << endll;
+            for(int i = 0; i < n; i++){
+                if(s[i] == '1'){
+                    cout << nums[i] << " ";
+                } else {
+                    cout << ll(-1e17) << " ";
+                }
+            }
+            cout << endll;
+            return;
+        }
+        if(r < n - 1){
+            if(r < n - 2 && s[r + 2] == '1'){
+                continue;
+            }
+            s[r + 1] = '1';
+            nums[r + 1] = 1e14;
+            ll new_sum = max_subarray_sum(l, r + 1);
+            new_sum -= 1e14;
+            nums[r + 1] = 0;
+            if(new_sum > k){
+                continue;
+            }
+            nums[r + 1] = k - new_sum;
+            if(new_sum < 0){
+                nums[r + 1] = k;
+            }
+            cout << "Yes" << endll;
+            for(int i = 0; i < n; i++){
+                if(s[i] == '1'){
+                    cout << nums[i] << " ";
+                } else {
+                    cout << ll(-1e17) << " ";
+                }
+            }
+            cout << endll;
+            return;
+        }
+    }
+    if(s[0] == '1'){
+        sums[0][0] = 0;
+    }
+    for(int i = 1; i < sums.size(); i++){
+        dbg(i);
+        //try merging two segments, ONLY if 1 zero in between them
+        int r1 = sums[i - 1][1];
+        int l2 = sums[i][0];
+        if(l2 - r1 != 2){
+            continue;
+        }
+        if(s[r1 + 1] == '1'){
+            continue;
+        }
+        dbg(nums);
+        dbg(sums[i - 1][0]);
+        dbg(sums[i][1]);
+        nums[r1 + 1] = 1e14;
+        ll new_sum = max_subarray_sum(sums[i - 1][0], sums[i][1]);
+        new_sum -= 1e14;
+        nums[r1 + 1] = 0;
+        dbg(new_sum);
+        if(new_sum > k){
+            continue;
+        }
+        s[r1 + 1] = '1';
+        nums[r1 + 1] = k - new_sum;
+        if(new_sum < 0){
+            nums[r1 + 1] = k;
+        }
+        cout << "Yes" << endll;
+        for(int i = 0; i < n; i++){
+            if(s[i] == '1'){
+                cout << nums[i] << " ";
+            } else {
+                cout << ll(-1e17) << " ";
+            }
+        }
+        cout << endll;
+        return;
+    }
+    cout << "No" << endll;
 }
 
 int32_t main()
@@ -88,3 +227,48 @@ int32_t main()
         solve(t+1);
     }
 }
+
+/*
+
+10
+3 5
+011
+0 0 1
+
+5 6
+11011
+4 -3 0 -2 1
+
+4 4
+0011
+0 0 -4 -5
+
+6 12
+110111
+1 2 0 5 -1 9
+
+5 19
+00000
+0 0 0 0 0
+
+5 19
+11001
+-8 6 0 0 -5
+
+5 10
+10101
+10 0 10 0 10
+
+1 1
+1
+0
+
+3 5
+111
+3 -1 3
+
+4 5
+1011
+-2 0 1 -5
+
+*/

@@ -47,22 +47,56 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
-    }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
+    int n;
+    cin >> n;
+    vi ans(n, 1);
+    int a, b;
+    cin >> a >> b;
+    //a is number of oh's
+    if(a == 0 && b == 0){
+        ans[0] = 10;
+        for(int i = 0; i < n; i++){
+            cout << ans[i] << " ";
+        }
+        cout << endll;
         return;
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    if(b == 0){
+        for(int i = 0; i <= a; i++){
+            if(i + 1 >= n){
+                cout << -1 << endll;
+                return;
+            }
+            ans[i + 1] = i + 1;
+        }
+        if(*max_element(all(ans)) > 5e4){
+            cout << -1 << endll;
+            return;
+        }
+        for(int i = 0; i < n; i++){
+            cout << ans[i] << " ";
+        }
+        cout << endll;
+        return;
+    }
+    for(int i = 1; i <= b; i++){
+        ans[i] = 1 << i;
+    }
+    for(int i = b + 1; i < (a + b + 1); i++){
+        if(i >= n){
+            cout << -1 << endll;
+            return;
+        }
+        ans[i] = ans[i - 1] + 1;
+    }
+    if(*max_element(all(ans)) > 5e4){
+        cout << -1 << endll;
+        return;
+    }
+    for(int i = 0; i < n; i++){
+        cout << ans[i] << " ";
+    }
+    cout << endll;
 }
 
 int32_t main()
@@ -71,7 +105,7 @@ int32_t main()
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     for(ll t = 0; t < T; t++){
         solve(t+1);
     }

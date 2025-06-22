@@ -1,4 +1,3 @@
-#include <algorithm>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -47,22 +46,30 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+    ll k, a, b, x, y;
+    cin >> k >> a >> b >> x >> y;
+    if(y < x || (y == x && b < a)) {
+        swap(x, y);
+        swap(a, b);
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
-        return;
+    ll ans = 0;
+    ans += max((k - a) / x, 0ll);
+    dbg(a); dbg(x); dbg(b); dbg(y);
+    k -= ans * x;
+    if(k >= a){
+        k -= x;
+        ans++;
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    dbg(ans);
+    dbg(k);
+    ll ans2 = max((k - b) / y, 0ll);
+    k -= ans2 * y;
+    dbg(ans2);
+    if(k >= b){
+        k -= y;
+        ans2++;
+    }
+    cout << ans + ans2 << endll;
 }
 
 int32_t main()

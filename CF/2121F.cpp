@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -37,7 +38,7 @@ inline void open(string name){
 }    
 
 //comment to enable debugging
-#define dbg(x)
+//!#define dbg(x)
 
 #ifndef dbg
 #define dbg(x) cerr << __LINE__ << ": " << #x << "=" << x << endl;
@@ -45,24 +46,42 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-void solve(int num_tc)
+ll subsolve(int n, vll& a, ll x, ll s){
+    if(n == 0) return 0;
+    dbg(a);
+    vll pref(n + 1, 0); 
+    for(int i = 0; i < n; i++){
+        pref[i + 1] = pref[i] + a[i];
+        pref[i] = pref[i + 1];
+    }
+    pref.pop_back();
+    dbg(pref);
+    ll ans = 0;
+    
+    return ans;
+}
+
+void bruteforcer(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
+    ll n, s, x;
+    cin >> n >> s >> x;
     vll a(n);
+    vi xs;
+    vi gxs;
     for(int i = 0; i < n; i++){
         cin >> a[i];
-        sum += a[i];
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
-        return;
+    ll ans = 0;
+    vll current;
+    for(int i = 0; i < n; i++){
+        if(a[i] > x){
+            ans += subsolve(current.size(), current, x, s);
+            current.clear();
+        }
+        current.push_back(a[i]);
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    ans += subsolve(current.size(), current, x, s);
+    cout << ans << endll;
 }
 
 int32_t main()
@@ -73,6 +92,6 @@ int32_t main()
     ll T = 1;
     cin >> T;
     for(ll t = 0; t < T; t++){
-        solve(t+1);
+        bruteforcer(t+1);
     }
 }

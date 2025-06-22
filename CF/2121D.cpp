@@ -1,4 +1,3 @@
-#include <algorithm>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -45,24 +44,42 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-void solve(int num_tc)
+void bruteforcer(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
+    int n;
+    cin >> n;
+    vi a(n);
+    fillv(a, n);
+    vi b(n);
+    fillv(b, n);
     for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+        a[i]--;
+        b[i]--;
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
-        return;
+    vector<pair<int, int>> ans;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n - i - 1; j++){
+            if(a[j] > a[j + 1]){
+                swap(a[j], a[j + 1]);
+                ans.push_back({1, j + 1});
+            }
+            if(b[j] > b[j + 1]){
+                swap(b[j], b[j + 1]);
+                ans.push_back({2, j + 1});
+            }
+        }
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    for(int i = 0; i < n; i++){
+        if(a[i] > b[i]){
+            swap(a[i], b[i]);
+            ans.push_back({3, i + 1});
+        }
+    }
+ 
+    cout << ans.size() << endll;
+    for(auto [x, y] : ans){
+        cout << x << " " << y << endll;
+    }
 }
 
 int32_t main()
@@ -73,6 +90,6 @@ int32_t main()
     ll T = 1;
     cin >> T;
     for(ll t = 0; t < T; t++){
-        solve(t+1);
+        bruteforcer(t+1);
     }
 }

@@ -1,4 +1,3 @@
-#include <algorithm>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -47,22 +46,37 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
+    int n, m;
+    cin >> n >> m;
+    vvi grid(n, vi(m));
     for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+        fillv(grid[i], m);
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
-        return;
+    int big = 0;
+    vector<pair<int, int>> occ[101];
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            occ[grid[i][j]].emplace_back(i, j);
+            big = max(big, grid[i][j]);
+        }
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    vi rows(n, 0), cols(m, 0);
+    for(auto [i, j] : occ[big]){
+        rows[i]++;
+        cols[j]++;
+    }
+    dbg(rows);
+    dbg(cols);
+    dbg(occ[big]);
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(rows[i] + cols[j] - (grid[i][j] == big) == occ[big].size()){
+                cout << big - 1 << endll;
+                return;
+            }
+        }
+    }
+    cout << big << endll;
 }
 
 int32_t main()

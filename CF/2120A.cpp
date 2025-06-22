@@ -1,4 +1,3 @@
-#include <algorithm>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -47,22 +46,57 @@ inline void open(string name){
 
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+    int x1, y1, x2, y2, x3, y3;
+    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+    if(x1 == x2 && x2 == x3){
+        if(y1 + y2 + y3 == x1){
+            cout << "YES" << endll;
+            return;
+        } else {
+            cout << "NO" << endll;
+            return;
+        }
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
+    if(y1 == y2 && y2 == y3){
+        if(x1 + x2 + x3 == y1){
+            cout << "YES" << endll;
+            return;
+        } else {
+            cout << "NO" << endll;
+            return;
+        }
+    }
+    if(x1 == y1){
+        cout << "NO" << endll;
         return;
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    if(x2 + x3 == x1){
+        if(y2 != y3){
+            cout << "NO" << endll;
+            return;
+        }
+        if(y2 + y3 == x1){
+            cout << "YES" << endll;
+            return;
+        } else {
+            cout << "NO" << endll;
+            return;
+        }
+    }
+    if(y2 + y3 == y1){
+        if(x2 != x3){
+            cout << "NO" << endll;
+            return;
+        }
+        if(x2 + x3 == y1){
+            cout << "YES" << endll;
+            return;
+        } else {
+            cout << "NO" << endll;
+            return;
+        }
+    }
+    cout << -1 << endll;
 }
 
 int32_t main()

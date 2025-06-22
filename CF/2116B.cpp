@@ -1,4 +1,3 @@
-#include <algorithm>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -20,7 +19,7 @@ typedef pair<ll, ll> pll;
 
 #define all(x) (x).begin(), (x).end()
 
-#define MOD ll(1e9+7)
+#define MOD ll(998244353)
 #define inf int(1e9+1)
 #define INF ll(1e18+1)
 
@@ -45,24 +44,44 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
+vll pow2(1e5 + 5);
+
 void solve(int num_tc)
 {
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
+    int n;
+    cin >> n;
     vll a(n);
+    fillv(a, n);
+    vll b(n);
+    fillv(b, n);
+    
+    vll maxinda(n);
+    ll minda = 0;
+    vll maxindb(n);
+    ll mindb = 0;
     for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+        if(a[i] > a[minda]){
+            minda = i;
+        }
+        maxinda[i] = minda;
+        if(b[i] > b[mindb]){
+            mindb = i;
+        }
+        maxindb[i] = mindb;
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
-        return;
+    for(int i = 0; i < n; i++){
+        ll ans1 = a[maxinda[i]] * 1e5 + b[i - maxinda[i]];
+        ll ans2 = b[maxindb[i]] * 1e5 + a[i - maxindb[i]];
+        if(ans1 > ans2){
+            cout << (pow2[a[maxinda[i]]] + pow2[b[i - maxinda[i]]]) % MOD<< " ";
+        }
+        else{
+            cout << (pow2[b[maxindb[i]]] + pow2[a[i - maxindb[i]]]) % MOD << " ";
+        }
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    dbg(maxinda);
+    dbg(maxindb);
+    cout << endll;
 }
 
 int32_t main()
@@ -70,6 +89,10 @@ int32_t main()
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);  
     dbg("turn off debugging");
+    pow2[0] = 1;
+    for(int i = 1; i < pow2.size(); i++){
+        pow2[i] = (pow2[i-1] * 2) % MOD;
+    }
     ll T = 1;
     cin >> T;
     for(ll t = 0; t < T; t++){

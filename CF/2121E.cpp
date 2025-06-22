@@ -1,4 +1,3 @@
-#include <algorithm>
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops") 
 #include <bits/stdc++.h>
@@ -45,24 +44,45 @@ inline void open(string name){
 #include "cp-templates/Debugging/alldebug.h"
 #endif
 
-void solve(int num_tc)
-{
-    int n, k;
-    cin >> n >> k;
-    ll sum = 0;
-    vll a(n);
-    for(int i = 0; i < n; i++){
-        cin >> a[i];
-        sum += a[i];
+int getkthdigit(int x, int k) {
+    while(k--) {
+        x /= 10;
     }
-    sort(all(a));
-    a.back()--;
-    sort(all(a));
-    if(a[n - 1] - a[0] > k){
-        cout << "Jerry" << endll;
+    return x % 10;
+}
+
+void bruteforcer(int num_tc)
+{
+    string l;
+    string r;
+    cin >> l >> r;
+    int n = l.size();
+    int ans = 0;
+    int i = 0;
+    for(; i < n; i++){
+        if(l[i] != r[i]){
+            break;
+        }
+        ans += 2;
+    }
+    if(i == n){
+        cout << ans << endll;
         return;
     }
-    cout << (vector<string>({"Tom", "Jerry"})[(sum % 2 == 0)]) << endll;
+    if(r[i] - l[i] > 1){
+        cout << ans << endll;
+        return;
+    }
+    i++;
+    for(; i < n; i++){
+        int ldig = l[i] - '0';
+        int rdig = r[i] - '0';
+        if(ldig == 9 && rdig == 0){
+            ans++;
+        }
+        else break;
+    }
+    cout << ans + 1 << endll;
 }
 
 int32_t main()
@@ -73,6 +93,6 @@ int32_t main()
     ll T = 1;
     cin >> T;
     for(ll t = 0; t < T; t++){
-        solve(t+1);
+        bruteforcer(t+1);
     }
 }
